@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://bta3bhnefd0yb"]
+
+[ext_resource type="FontFile" uid="uid://rj2q7aei0yhx" path="res://Fonts/Good Old DOS Distorted.ttf" id="1_i0gs2"]
+[ext_resource type="Script" path="res://rooms/room.gd" id="1_t5y86"]
+
+[node name="Room" type="PanelContainer"]
+custom_minimum_size = Vector2(250, 200)
+offset_right = 250.0
+offset_bottom = 200.0
+script = ExtResource("1_t5y86")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Rows" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="roomName" type="Label" parent="MarginContainer/Rows"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_i0gs2")
+theme_override_font_sizes/font_size = 20
+text = "Room Name"
+horizontal_alignment = 1
+
+[node name="roomDescription" type="Label" parent="MarginContainer/Rows"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_i0gs2")
+theme_override_font_sizes/font_size = 16
+text = "This is the description"
+autowrap_mode = 3

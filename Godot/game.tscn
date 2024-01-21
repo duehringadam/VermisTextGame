@@ -1,0 +1,152 @@
+[gd_scene load_steps=16 format=3 uid="uid://0by4xhjbidar"]
+
+[ext_resource type="Script" path="res://game.gd" id="1_hc51e"]
+[ext_resource type="FontFile" uid="uid://rj2q7aei0yhx" path="res://Fonts/Good Old DOS Distorted.ttf" id="1_nmk3a"]
+[ext_resource type="Script" path="res://input/input.gd" id="1_ycvyf"]
+[ext_resource type="Script" path="res://CommandProcessor.gd" id="2_foc7h"]
+[ext_resource type="PackedScene" uid="uid://bta3bhnefd0yb" path="res://rooms/room.tscn" id="3_jd0sj"]
+[ext_resource type="Script" path="res://rooms/Room Manager.gd" id="3_l8yh6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agpge"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lad2q"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vwhyg"]
+bg_color = Color(0, 0.72549, 0.211765, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yldr8"]
+bg_color = Color(0.462745, 1, 0.427451, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2spmw"]
+bg_color = Color(0, 0.827451, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kf5a3"]
+content_margin_left = 3.0
+content_margin_right = 3.0
+bg_color = Color(0, 0, 0, 1)
+draw_center = false
+border_color = Color(0, 1, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_k68if"]
+default_font = ExtResource("1_nmk3a")
+default_font_size = 19
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_vwhyg")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_yldr8")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_2spmw")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_kf5a3")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j120g"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ig1tl"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_hc51e")
+
+[node name="CommandProcessor" type="Node" parent="."]
+script = ExtResource("2_foc7h")
+
+[node name="Room Manager" type="Node" parent="."]
+script = ExtResource("3_l8yh6")
+
+[node name="Field" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = -2.0
+offset_top = -341.0
+offset_right = 248.0
+offset_bottom = -141.0
+roomName = "A field"
+roomDescription = "An open field with a path forward"
+
+[node name="Field2" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_top = -592.0
+offset_bottom = -392.0
+roomName = "a field"
+roomDescription = "a meandering path"
+
+[node name="Field3" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = 6.0
+offset_top = -845.0
+offset_right = 256.0
+offset_bottom = -645.0
+roomName = "a house"
+roomDescription = "empty house"
+
+[node name="Game Scene" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="Background" type="PanelContainer" parent="Game Scene"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = 1151.0
+offset_bottom = 647.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_agpge")
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Game Scene/Background"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="rows" type="VBoxContainer" parent="Game Scene/Background/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="gameInfo" type="PanelContainer" parent="Game Scene/Background/MarginContainer/rows"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_lad2q")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Game Scene/Background/MarginContainer/rows/gameInfo"]
+layout_mode = 2
+theme = SubResource("Theme_k68if")
+horizontal_scroll_mode = 0
+
+[node name="historyRows" type="VBoxContainer" parent="Game Scene/Background/MarginContainer/rows/gameInfo/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="inputArea" type="PanelContainer" parent="Game Scene/Background/MarginContainer/rows"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_j120g")
+
+[node name="inputHbox" type="HBoxContainer" parent="Game Scene/Background/MarginContainer/rows/inputArea"]
+layout_mode = 2
+
+[node name="Caret" type="Label" parent="Game Scene/Background/MarginContainer/rows/inputArea/inputHbox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("1_nmk3a")
+theme_override_font_sizes/font_size = 20
+text = " > "
+
+[node name="input" type="LineEdit" parent="Game Scene/Background/MarginContainer/rows/inputArea/inputHbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("1_nmk3a")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ig1tl")
+max_length = 48
+script = ExtResource("1_ycvyf")
+
+[connection signal="text_submitted" from="Game Scene/Background/MarginContainer/rows/inputArea/inputHbox/input" to="." method="_on_input_text_submitted"]
+[connection signal="text_submitted" from="Game Scene/Background/MarginContainer/rows/inputArea/inputHbox/input" to="Game Scene/Background/MarginContainer/rows/inputArea/inputHbox/input" method="_on_text_submitted"]
