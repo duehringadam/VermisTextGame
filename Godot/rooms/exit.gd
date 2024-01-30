@@ -2,10 +2,8 @@ extends Resource
 class_name Exit
 
 var room_1: GameRoom = null
-var room_1_isLocked := false
-
 var room_2: GameRoom = null
-var room_2_isLocked := false
+var isLocked := false
 
 
 func getOtherRoom(currentRoom: GameRoom):

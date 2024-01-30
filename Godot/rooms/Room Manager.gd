@@ -3,16 +3,37 @@ extends Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var key = Item.new()
-	var poopBucket = Item.new()
 	
-	poopBucket.initialize("A Poop Bucket", Types.ItemTypes.KEY)
-	key.initialize("Key", Types.ItemTypes.KEY)
+	#instantiate items
+	var key = loadItem("houseKey")
+	var bucket = loadItem("Bucket")
 	
-	
-	$Field.connectExit("north", $Field2)
-	$Field2.connectExit("west",$Field3)
-	
-	$Field3.addItem(poopBucket)
+	#room 1
+	$Field.connectExitUnlocked("north", $Field2)
 	$Field.addItem(key)
+	
+	#room2
+	#create exit and key useValue
+	var exit = $Field2.connectExitLocked("inside",$House)
+	key.useValue = exit
+	#add npc to house
+	var houseResident = loadNPC("houseResident")
+	$House.addNPC(houseResident)
+	exit = $House.connectExitLocked("inside",$Barn,"house")
+	houseResident.questReward = exit
+	
+	#add exit to shed with override text
+	$Field2.connectExitUnlocked("east",$Shed,"outside")
+	#add npc to shed
+	var shedResident = loadNPC("resident")
+	$Shed.addNPC(shedResident)
+	$Shed.addItem(bucket)
+	
+	
+	
+func loadItem(itemName: String):
+	return load("res://items/" + itemName + ".tres")
+	
+func loadNPC(npcName: String):
+	return load("res://npcs/" + npcName + ".tres")
 

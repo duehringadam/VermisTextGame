@@ -2,5 +2,6 @@ extends Node
 
 
 enum ItemTypes{
-	KEY = 0
+	KEY,
+	QUEST
 }

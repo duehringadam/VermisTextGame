@@ -1,54 +1,82 @@
-[gd_scene load_steps=16 format=3 uid="uid://0by4xhjbidar"]
+[gd_scene load_steps=18 format=3 uid="uid://0by4xhjbidar"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_hc51e"]
 [ext_resource type="FontFile" uid="uid://rj2q7aei0yhx" path="res://Fonts/Good Old DOS Distorted.ttf" id="1_nmk3a"]
 [ext_resource type="Script" path="res://input/input.gd" id="1_ycvyf"]
 [ext_resource type="Script" path="res://CommandProcessor.gd" id="2_foc7h"]
+[ext_resource type="Script" path="res://Player.gd" id="2_mxf0g"]
 [ext_resource type="PackedScene" uid="uid://bta3bhnefd0yb" path="res://rooms/room.tscn" id="3_jd0sj"]
 [ext_resource type="Script" path="res://rooms/Room Manager.gd" id="3_l8yh6"]
+[ext_resource type="Shader" path="res://shaders/crt.gdshader" id="6_l1nyo"]
+[ext_resource type="PackedScene" uid="uid://r78o4og84nxb" path="res://game_info.tscn" id="7_xxh0i"]
+[ext_resource type="Texture2D" uid="uid://dksuhd1ftd8dg" path="res://icon.svg" id="9_7gtp1"]
+[ext_resource type="Shader" path="res://shaders/new_shader.gdshader" id="9_uvttc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agpge"]
 bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lad2q"]
-bg_color = Color(0, 0, 0, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ipce"]
+shader = ExtResource("6_l1nyo")
+shader_parameter/res = null
+shader_parameter/mask_type = 0
+shader_parameter/bloom_type = 0
+shader_parameter/hardScan = -8.0
+shader_parameter/hardPix = -2.0
+shader_parameter/hardBloomScan = -2.0
+shader_parameter/hardBloomPix = -1.5
+shader_parameter/bloomAmount = 16.0
+shader_parameter/warp = Vector2(64, 24)
+shader_parameter/maskDark = 0.5
+shader_parameter/maskLight = 1.5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vwhyg"]
-bg_color = Color(0, 0.72549, 0.211765, 1)
-anti_aliasing = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yldr8"]
-bg_color = Color(0.462745, 1, 0.427451, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2spmw"]
-bg_color = Color(0, 0.827451, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kf5a3"]
-content_margin_left = 3.0
-content_margin_right = 3.0
-bg_color = Color(0, 0, 0, 1)
-draw_center = false
-border_color = Color(0, 1, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="Theme" id="Theme_k68if"]
-default_font = ExtResource("1_nmk3a")
-default_font_size = 19
-VScrollBar/styles/grabber = SubResource("StyleBoxFlat_vwhyg")
-VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_yldr8")
-VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_2spmw")
-VScrollBar/styles/scroll = SubResource("StyleBoxFlat_kf5a3")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3nkj6"]
+shader = ExtResource("6_l1nyo")
+shader_parameter/res = null
+shader_parameter/mask_type = 0
+shader_parameter/bloom_type = 0
+shader_parameter/hardScan = -8.0
+shader_parameter/hardPix = -2.0
+shader_parameter/hardBloomScan = -2.0
+shader_parameter/hardBloomPix = -1.5
+shader_parameter/bloomAmount = 16.0
+shader_parameter/warp = Vector2(64, 24)
+shader_parameter/maskDark = 0.5
+shader_parameter/maskLight = 1.5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j120g"]
 bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ig1tl"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h64ot"]
+shader = ExtResource("9_uvttc")
+shader_parameter/overlay = true
+shader_parameter/scanlines_opacity = 0.054
+shader_parameter/scanlines_width = 0.25
+shader_parameter/grille_opacity = 0.277
+shader_parameter/resolution = Vector2(1920, 1080)
+shader_parameter/pixelate = true
+shader_parameter/roll = true
+shader_parameter/roll_speed = 8.0
+shader_parameter/roll_size = 14.852
+shader_parameter/roll_variation = 1.121
+shader_parameter/distort_intensity = 0.01
+shader_parameter/noise_opacity = 0.024
+shader_parameter/noise_speed = 5.0
+shader_parameter/static_noise_intensity = 0.06
+shader_parameter/aberration = -0.00999995
+shader_parameter/brightness = 1.4
+shader_parameter/discolor = true
+shader_parameter/warp_amount = 0.149
+shader_parameter/clip_warp = false
+shader_parameter/vignette_intensity = 0.2
+shader_parameter/vignette_opacity = 0.728
+
 [node name="Game" type="Node2D"]
 script = ExtResource("1_hc51e")
+
+[node name="Player" type="Node" parent="."]
+script = ExtResource("2_mxf0g")
 
 [node name="CommandProcessor" type="Node" parent="."]
 script = ExtResource("2_foc7h")
@@ -68,15 +96,31 @@ roomDescription = "An open field with a path forward"
 offset_top = -592.0
 offset_bottom = -392.0
 roomName = "a field"
-roomDescription = "a meandering path"
+roomDescription = "a meandering path leading to a house with a shed to the east"
 
-[node name="Field3" parent="Room Manager" instance=ExtResource("3_jd0sj")]
-offset_left = 6.0
-offset_top = -845.0
-offset_right = 256.0
-offset_bottom = -645.0
-roomName = "a house"
-roomDescription = "empty house"
+[node name="Barn" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = -579.0
+offset_top = -597.0
+offset_right = -329.0
+offset_bottom = -397.0
+roomName = "a barn"
+roomDescription = "an empty barn with hay strewn about"
+
+[node name="House" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = -290.0
+offset_top = -594.0
+offset_right = -40.0
+offset_bottom = -394.0
+roomName = "house"
+roomDescription = "empty house with a moldy cot, its locked back door leads to a barn."
+
+[node name="Shed" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = 318.0
+offset_top = -596.0
+offset_right = 568.0
+offset_bottom = -396.0
+roomName = "shed"
+roomDescription = "sodden shed with rusted tools."
 
 [node name="Game Scene" type="Control" parent="."]
 layout_mode = 3
@@ -97,48 +141,41 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_agpge")
 metadata/_edit_use_anchors_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="Game Scene/Background"]
+material = SubResource("ShaderMaterial_2ipce")
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="rows" type="VBoxContainer" parent="Game Scene/Background/MarginContainer"]
+[node name="Columns" type="HBoxContainer" parent="Game Scene/Background/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 20
 
-[node name="gameInfo" type="PanelContainer" parent="Game Scene/Background/MarginContainer/rows"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_lad2q")
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Game Scene/Background/MarginContainer/rows/gameInfo"]
-layout_mode = 2
-theme = SubResource("Theme_k68if")
-horizontal_scroll_mode = 0
-
-[node name="historyRows" type="VBoxContainer" parent="Game Scene/Background/MarginContainer/rows/gameInfo/ScrollContainer"]
+[node name="rows" type="VBoxContainer" parent="Game Scene/Background/MarginContainer/Columns"]
+material = SubResource("ShaderMaterial_3nkj6")
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="inputArea" type="PanelContainer" parent="Game Scene/Background/MarginContainer/rows"]
+[node name="gameInfo" parent="Game Scene/Background/MarginContainer/Columns/rows" instance=ExtResource("7_xxh0i")]
+layout_mode = 2
+
+[node name="inputArea" type="PanelContainer" parent="Game Scene/Background/MarginContainer/Columns/rows"]
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_j120g")
 
-[node name="inputHbox" type="HBoxContainer" parent="Game Scene/Background/MarginContainer/rows/inputArea"]
+[node name="inputHbox" type="HBoxContainer" parent="Game Scene/Background/MarginContainer/Columns/rows/inputArea"]
 layout_mode = 2
 
-[node name="Caret" type="Label" parent="Game Scene/Background/MarginContainer/rows/inputArea/inputHbox"]
+[node name="Caret" type="Label" parent="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 1, 0, 1)
 theme_override_fonts/font = ExtResource("1_nmk3a")
 theme_override_font_sizes/font_size = 20
 text = " > "
 
-[node name="input" type="LineEdit" parent="Game Scene/Background/MarginContainer/rows/inputArea/inputHbox"]
+[node name="input" type="LineEdit" parent="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 1, 0, 1)
@@ -148,5 +185,13 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_ig1tl")
 max_length = 48
 script = ExtResource("1_ycvyf")
 
-[connection signal="text_submitted" from="Game Scene/Background/MarginContainer/rows/inputArea/inputHbox/input" to="." method="_on_input_text_submitted"]
-[connection signal="text_submitted" from="Game Scene/Background/MarginContainer/rows/inputArea/inputHbox/input" to="Game Scene/Background/MarginContainer/rows/inputArea/inputHbox/input" method="_on_text_submitted"]
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+visibility_layer = 512
+material = SubResource("ShaderMaterial_h64ot")
+position = Vector2(576, 325)
+scale = Vector2(8.96875, 5.03125)
+texture = ExtResource("9_7gtp1")
+
+[connection signal="text_submitted" from="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" to="." method="_on_input_text_submitted"]
+[connection signal="text_submitted" from="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" to="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" method="_on_text_submitted"]
