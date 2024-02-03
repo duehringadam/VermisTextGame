@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://r78o4og84nxb"]
+[gd_scene load_steps=10 format=3 uid="uid://r78o4og84nxb"]
 
 [ext_resource type="FontFile" uid="uid://rj2q7aei0yhx" path="res://Fonts/Good Old DOS Distorted.ttf" id="1_kcg7w"]
 [ext_resource type="Script" path="res://game_info.gd" id="1_x6kac"]
+[ext_resource type="Script" path="res://dialogue.gd" id="3_7135f"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lad2q"]
 bg_color = Color(0, 0, 0, 1)
@@ -50,3 +51,15 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 20
+script = ExtResource("3_7135f")
+
+[node name="Label" type="Label" parent="ScrollContainer/historyRows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+
+[node name="next_char" type="Timer" parent="ScrollContainer/historyRows"]
+
+[node name="next_message" type="Timer" parent="ScrollContainer/historyRows"]
+
+[connection signal="timeout" from="ScrollContainer/historyRows/next_char" to="ScrollContainer/historyRows" method="_on_next_char_timeout"]
+[connection signal="timeout" from="ScrollContainer/historyRows/next_message" to="ScrollContainer/historyRows" method="_on_next_message_timeout"]

@@ -1,15 +1,17 @@
 extends PanelContainer
 
+
 const INPUTRESPONSE = preload("res://input/input_response.tscn")
 
+@onready var history_rows = $ScrollContainer/historyRows
 @onready var scroll = $ScrollContainer
 @onready var scrollbar = scroll.get_v_scroll_bar()
-@onready var history_rows = $ScrollContainer/historyRows
 
 @export var max_lines_remembered: int = 30
 
-func ready() ->void:
+func _ready() ->void:
 	scrollbar.connect("changed", _handle_scrollbar_changed)
+	
 
 ####Public funcs####
 func handleResponse(response_text: String):
@@ -37,4 +39,8 @@ func _deleteHistory():
 
 func _addResponseToGame(response: Control):
 	history_rows.add_child(response)
+	_deleteHistory()
+	
+func _addIntroToGame(intro: Node2D):
+	history_rows.add_child(intro)
 	_deleteHistory()

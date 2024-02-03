@@ -15,4 +15,4 @@ func getInventory() -> String:
 	var itemString = ""
 	for item in inventory:
 		itemString += item.itemName + " "
-	return "Iventory: " + itemString
+	return "Inventory: " + itemString

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://0by4xhjbidar"]
+[gd_scene load_steps=21 format=3 uid="uid://0by4xhjbidar"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_hc51e"]
 [ext_resource type="FontFile" uid="uid://rj2q7aei0yhx" path="res://Fonts/Good Old DOS Distorted.ttf" id="1_nmk3a"]
@@ -11,6 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://r78o4og84nxb" path="res://game_info.tscn" id="7_xxh0i"]
 [ext_resource type="Texture2D" uid="uid://dksuhd1ftd8dg" path="res://icon.svg" id="9_7gtp1"]
 [ext_resource type="Shader" path="res://shaders/new_shader.gdshader" id="9_uvttc"]
+[ext_resource type="PackedScene" uid="uid://c4x8yak13n2cc" path="res://side_panel.tscn" id="10_qexic"]
+[ext_resource type="AudioStream" uid="uid://cfktghk465wl7" path="res://sounds/10 Minutes of Ambient Computer Sounds - RetroSciFi Medley.mp3" id="12_oy1ke"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agpge"]
 bg_color = Color(0, 0, 0, 1)
@@ -45,8 +47,18 @@ shader_parameter/maskLight = 1.5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j120g"]
 bg_color = Color(0, 0, 0, 1)
+border_color = Color(0.282353, 0.956863, 0, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ig1tl"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v0r57"]
+bg_color = Color(0, 1, 0, 1)
+draw_center = false
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bpxjw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h64ot"]
 shader = ExtResource("9_uvttc")
@@ -60,26 +72,20 @@ shader_parameter/roll = true
 shader_parameter/roll_speed = 8.0
 shader_parameter/roll_size = 14.852
 shader_parameter/roll_variation = 1.121
-shader_parameter/distort_intensity = 0.01
+shader_parameter/distort_intensity = 0.002
 shader_parameter/noise_opacity = 0.024
 shader_parameter/noise_speed = 5.0
 shader_parameter/static_noise_intensity = 0.06
 shader_parameter/aberration = -0.00999995
 shader_parameter/brightness = 1.4
 shader_parameter/discolor = true
-shader_parameter/warp_amount = 0.149
+shader_parameter/warp_amount = 0.158
 shader_parameter/clip_warp = false
 shader_parameter/vignette_intensity = 0.2
 shader_parameter/vignette_opacity = 0.728
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_hc51e")
-
-[node name="Player" type="Node" parent="."]
-script = ExtResource("2_mxf0g")
-
-[node name="CommandProcessor" type="Node" parent="."]
-script = ExtResource("2_foc7h")
 
 [node name="Room Manager" type="Node" parent="."]
 script = ExtResource("3_l8yh6")
@@ -122,6 +128,12 @@ offset_bottom = -396.0
 roomName = "shed"
 roomDescription = "sodden shed with rusted tools."
 
+[node name="Player" type="Node" parent="."]
+script = ExtResource("2_mxf0g")
+
+[node name="CommandProcessor" type="Node" parent="."]
+script = ExtResource("2_foc7h")
+
 [node name="Game Scene" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -150,6 +162,7 @@ theme_override_constants/margin_bottom = 20
 
 [node name="Columns" type="HBoxContainer" parent="Game Scene/Background/MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="rows" type="VBoxContainer" parent="Game Scene/Background/MarginContainer/Columns"]
 material = SubResource("ShaderMaterial_3nkj6")
@@ -179,11 +192,19 @@ text = " > "
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_colors/caret_color = Color(0, 1, 0, 1)
+theme_override_colors/selection_color = Color(0, 1, 0, 1)
+theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("1_nmk3a")
 theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxEmpty_ig1tl")
+theme_override_styles/normal = SubResource("StyleBoxFlat_v0r57")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_bpxjw")
 max_length = 48
 script = ExtResource("1_ycvyf")
+
+[node name="sidePanel" parent="Game Scene/Background/MarginContainer/Columns" instance=ExtResource("10_qexic")]
+custom_minimum_size = Vector2(248, 0)
+layout_mode = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0, 0, 0, 1)
@@ -192,6 +213,11 @@ material = SubResource("ShaderMaterial_h64ot")
 position = Vector2(576, 325)
 scale = Vector2(8.96875, 5.03125)
 texture = ExtResource("9_7gtp1")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_oy1ke")
+volume_db = -15.864
+autoplay = true
 
 [connection signal="text_submitted" from="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" to="." method="_on_input_text_submitted"]
 [connection signal="text_submitted" from="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" to="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" method="_on_text_submitted"]

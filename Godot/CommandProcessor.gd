@@ -1,6 +1,6 @@
 extends Node
 
-#signal response_generated(response_text)
+signal room_changed
 
 var current_room = null
 var player = null
@@ -89,9 +89,10 @@ func help() -> String:
 		Give [item]"
 
 func changeRoom(newRoom: GameRoom) -> String:
-	
 	current_room = newRoom
+	emit_signal("room_changed", newRoom)
 	return newRoom.getFullRoom()
+	
 
 func drop(secondWord: String) ->String:
 	if secondWord == "":

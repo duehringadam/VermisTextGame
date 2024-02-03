@@ -1,13 +1,17 @@
 extends Node2D
 
-
 @onready var gameInfo = $"Game Scene/Background/MarginContainer/Columns/rows/gameInfo"
 @onready var command_Processor = $CommandProcessor
 @onready var room_manager = $"Room Manager"
 @onready var player = $Player
+@onready var side_panel = $"Game Scene/Background/MarginContainer/Columns/sidePanel"
+
+
 
 func _ready() -> void:
-	gameInfo.handleResponse("Welcome to the text adventure, you can type 'help' to see available commands")
+	command_Processor.room_changed.connect(side_panel.handle_room_changed)
+	gameInfo.handleResponse("Welcome to VERMIS: MIST AND SHADOWS 
+	you can type 'help' to see available commands")
 	var startingResponse = command_Processor.initialize(room_manager.get_child(0), player)
 	gameInfo.handleResponse(startingResponse)
 
