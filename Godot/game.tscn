@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://0by4xhjbidar"]
+[gd_scene load_steps=26 format=3 uid="uid://0by4xhjbidar"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_hc51e"]
 [ext_resource type="FontFile" uid="uid://rj2q7aei0yhx" path="res://Fonts/Good Old DOS Distorted.ttf" id="1_nmk3a"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://Player.gd" id="2_mxf0g"]
 [ext_resource type="PackedScene" uid="uid://bta3bhnefd0yb" path="res://rooms/room.tscn" id="3_jd0sj"]
 [ext_resource type="Script" path="res://rooms/Room Manager.gd" id="3_l8yh6"]
+[ext_resource type="AudioStream" uid="uid://ctdrl36hy3jai" path="res://sounds/inn at the edge of the world.mp3" id="4_iiswq"]
 [ext_resource type="Shader" path="res://shaders/crt.gdshader" id="6_l1nyo"]
 [ext_resource type="PackedScene" uid="uid://r78o4og84nxb" path="res://game_info.tscn" id="7_xxh0i"]
 [ext_resource type="Texture2D" uid="uid://dksuhd1ftd8dg" path="res://icon.svg" id="9_7gtp1"]
@@ -60,6 +61,46 @@ border_color = Color(0, 1, 0, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bpxjw"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2p1pn"]
+bg_color = Color(0, 1, 0, 1)
+draw_center = false
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cuqho"]
+bg_color = Color(0.0705882, 0.0705882, 0.0705882, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hxcl3"]
+bg_color = Color(0, 1, 0, 1)
+draw_center = false
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 1, 0, 1)
+
+[sub_resource type="GDScript" id="GDScript_olta5"]
+script/source = "extends Button
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h64ot"]
 shader = ExtResource("9_uvttc")
 shader_parameter/overlay = true
@@ -90,43 +131,94 @@ script = ExtResource("1_hc51e")
 [node name="Room Manager" type="Node" parent="."]
 script = ExtResource("3_l8yh6")
 
-[node name="Field" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+[node name="Crypt" parent="Room Manager" instance=ExtResource("3_jd0sj")]
 offset_left = -2.0
 offset_top = -341.0
 offset_right = 248.0
 offset_bottom = -141.0
-roomName = "A field"
-roomDescription = "An open field with a path forward"
+roomName = "Isolated Crypt"
+roomDescription = "You wake up and find yourself in a small crypt in the middle of Greengrave, it is cold and damp but somehow comfortable."
 
-[node name="Field2" parent="Room Manager" instance=ExtResource("3_jd0sj")]
-offset_top = -592.0
-offset_bottom = -392.0
-roomName = "a field"
-roomDescription = "a meandering path leading to a house with a shed to the east"
+[node name="Graveyard" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = 5.0
+offset_top = -687.0
+offset_right = 255.0
+offset_bottom = -405.0
+roomName = "Graveyard"
+roomDescription = "Decrepit and abandoned, lichen covered gravestones litter the field infront of you. A bitter cold wind bites through you. Before you lies two paths: east leads deeper into the gaveyard; north leads into the higher burial grounds."
 
-[node name="Barn" parent="Room Manager" instance=ExtResource("3_jd0sj")]
-offset_left = -579.0
-offset_top = -597.0
-offset_right = -329.0
-offset_bottom = -397.0
-roomName = "a barn"
-roomDescription = "an empty barn with hay strewn about"
+[node name="High Burial Grounds" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = -8.0
+offset_top = -1100.0
+offset_right = 286.0
+offset_bottom = -718.0
+roomName = "Higher Burial Grounds"
+roomDescription = "A cold and deafening wind cuts through the summit as you near the end of this pathway; As you reach the peak you delight in the majestic view of the entire graveyard valley below.
 
-[node name="House" parent="Room Manager" instance=ExtResource("3_jd0sj")]
-offset_left = -290.0
-offset_top = -594.0
-offset_right = -40.0
-offset_bottom = -394.0
-roomName = "house"
-roomDescription = "empty house with a moldy cot, its locked back door leads to a barn."
+Hidden in a nook of this burial ground is a salient with six tombs, one of which is open, leading to the pauper's catacombs.
 
-[node name="Shed" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+Those who lie within are not among the living."
+
+[node name="Deep Graveyard" parent="Room Manager" instance=ExtResource("3_jd0sj")]
 offset_left = 318.0
 offset_top = -596.0
 offset_right = 568.0
 offset_bottom = -396.0
-roomName = "shed"
-roomDescription = "sodden shed with rusted tools."
+roomName = "Deep Graveyard"
+roomDescription = "Deep in the graveyard, far from other tombs lies an open coffin, the skeleton within holds a sword tightly in its grasp."
+
+[node name="Catacombs" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = 14.0
+offset_top = -1421.0
+offset_right = 275.0
+offset_bottom = -1139.0
+roomName = "Pauper's Catacombs"
+roomDescription = "A placed filled with the corpses of those not remembered: anonymous warriors, disgraced nobles, mere peasants.
+The walls overflow with bones, the pitch dark corridors are leaking and the air is dense with the heavy smell of rot."
+
+[node name="Catacombs_rm_1" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = 310.0
+offset_top = -1418.0
+offset_right = 571.0
+offset_bottom = -1136.0
+roomName = "Burial Room"
+roomDescription = "The walls are lined with those laid to rest. The room hangs heavy with the smell of rot and mold"
+
+[node name="Catacombs_rm_2" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = -296.0
+offset_top = -1418.0
+offset_right = -35.0
+offset_bottom = -1136.0
+roomName = "Side room"
+roomDescription = "An unfinished room in the catacombs, splintered bone litters the floor. Perhaps those constructing the room rest on the ground.
+
+Ominous sculptures of what seems to be a skeleton lines the perimeter of this room. You feel as if they are watching you."
+
+[node name="Catacombs_rm_3" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = -597.0
+offset_top = -1780.0
+offset_right = -336.0
+offset_bottom = -1458.0
+roomName = "Catacombs Hallway"
+roomDescription = "You find your way through the labrynthian catacombs, the shadows feel alive and dance in the corner of your eye."
+
+[node name="Catacombs_rm_4" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = -586.0
+offset_top = -2162.0
+offset_right = -325.0
+offset_bottom = -1840.0
+roomName = ""
+roomDescription = "You find your way through the labrynthian catacombs, the shadows feel alive and dance in the corner of your eye."
+
+[node name="Catacombs Intersection" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = -5.0
+offset_top = -1740.0
+offset_right = 298.0
+offset_bottom = -1458.0
+roomName = "Catacomb Intersection"
+roomDescription = "You reach an intersection in the catacomb, a statue depicting a mother lies infront.
+Heading left leads deeper into the catacombs, and the path to the right has caved in.
+"
 
 [node name="Player" type="Node" parent="."]
 script = ExtResource("2_mxf0g")
@@ -174,6 +266,7 @@ theme_override_constants/separation = 20
 layout_mode = 2
 
 [node name="inputArea" type="PanelContainer" parent="Game Scene/Background/MarginContainer/Columns/rows"]
+visible = false
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_j120g")
@@ -206,6 +299,22 @@ script = ExtResource("1_ycvyf")
 custom_minimum_size = Vector2(248, 0)
 layout_mode = 2
 
+[node name="quit_button" type="Button" parent="Game Scene"]
+layout_mode = 0
+offset_left = 894.0
+offset_top = 555.0
+offset_right = 1108.0
+offset_bottom = 610.0
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("1_nmk3a")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2p1pn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cuqho")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hxcl3")
+text = "Quit"
+script = SubResource("GDScript_olta5")
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0, 0, 0, 1)
 visibility_layer = 512
@@ -219,5 +328,11 @@ stream = ExtResource("12_oy1ke")
 volume_db = -15.864
 autoplay = true
 
+[node name="music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_iiswq")
+
+[connection signal="dialogue_ended_pass" from="Game Scene/Background/MarginContainer/Columns/rows/gameInfo" to="." method="_on_game_info_dialogue_ended_pass"]
+[connection signal="player_status" from="Game Scene/Background/MarginContainer/Columns/rows/gameInfo" to="." method="_on_game_info_player_status"]
 [connection signal="text_submitted" from="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" to="." method="_on_input_text_submitted"]
 [connection signal="text_submitted" from="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" to="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" method="_on_text_submitted"]
+[connection signal="pressed" from="Game Scene/quit_button" to="." method="_on_quit_button_pressed"]

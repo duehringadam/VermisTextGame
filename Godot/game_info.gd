@@ -1,6 +1,7 @@
 extends PanelContainer
 
-
+signal dialogue_ended_pass
+signal player_status
 const INPUTRESPONSE = preload("res://input/input_response.tscn")
 
 @onready var history_rows = $ScrollContainer/historyRows
@@ -8,6 +9,7 @@ const INPUTRESPONSE = preload("res://input/input_response.tscn")
 @onready var scrollbar = scroll.get_v_scroll_bar()
 
 @export var max_lines_remembered: int = 30
+
 
 func _ready() ->void:
 	scrollbar.connect("changed", _handle_scrollbar_changed)
@@ -26,6 +28,8 @@ func handleResponseWithInput(response_text: String, inputText: String):
 	_addResponseToGame(inputResponse)
 	inputResponse.set_text(response_text, inputText)
 	
+	#check player status
+	emit_signal("player_status")
 
 ####Private funcs####
 func _handle_scrollbar_changed():
@@ -41,6 +45,8 @@ func _addResponseToGame(response: Control):
 	history_rows.add_child(response)
 	_deleteHistory()
 	
-func _addIntroToGame(intro: Node2D):
-	history_rows.add_child(intro)
-	_deleteHistory()
+
+func _on_intro_text_dialogue_ended() -> void:
+	emit_signal("dialogue_ended_pass")
+
+	

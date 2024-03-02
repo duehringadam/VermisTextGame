@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="Inspect" load_steps=2 format=3 uid="uid://2sjeyakmhd84"]
+
+[ext_resource type="Script" path="res://Inspectables/inspect.gd" id="1_ofpph"]
+
+[resource]
+script = ExtResource("1_ofpph")
+inspectName = "Gravestones"
+inspectDescription = "Crumbling gravestones, the names faded long ago."

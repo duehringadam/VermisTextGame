@@ -4,7 +4,7 @@ class_name GameRoom
 
 @export var roomName: String = "Room Name": set = setRoomName
 @export_multiline var roomDescription: String = "Room Description": set = setRoomDescription
-	
+
 func setRoomName(newName):
 	$MarginContainer/Rows/roomName.text = newName
 	roomName = newName
@@ -15,15 +15,25 @@ func setRoomDescription(newDescription):
 var exits: Dictionary = {}
 var npcs: Array = []
 var items: Array = []
+var inspectables: Array = []
 
 func addNPC(npc: NPC):
 	npcs.append(npc)
+
+func removeNPC(npc: NPC):
+	npcs.erase(npc)
 
 func addItem(item: Item):
 	items.append(item)
 
 func removeItem(item: Item):
 	items.erase(item)
+
+func addInspect(inspect: Inspect):
+	inspectables.append(inspect)
+
+func removeInspect(inspect: Inspect):
+	inspectables.erase(inspect)
 
 func getFullRoom():
 	var fullRoom = PackedStringArray([getRoomName(),getRoomDescription()])
@@ -42,7 +52,7 @@ func getFullRoom():
 	return output
 	
 func getRoomName():
-	return "You are now in: " + roomName
+	return "You are now in: " + roomName + "\n"
 
 func getRoomDescription():
 	return roomDescription
@@ -51,7 +61,7 @@ func getRoomExit():
 	var exitString = PackedStringArray(
 		exits.keys()
 		)
-	return "Exits: " + ",".join(exitString)
+	return "\n"+"Exits: " + ",".join(exitString)
 
 func getNPCDescription() -> String:
 	if npcs.size() == 0:
@@ -109,6 +119,8 @@ func _connectExit(direction: String, room: GameRoom, is_locked: bool = false, ro
 				room.exits["path"] = exit
 			"outisde":
 				room.exits["inside"] = exit
+			"forward":
+				room.exits["back"] = exit
 			_:
 				printerr("invalid direction %s", direction)
 	return exit

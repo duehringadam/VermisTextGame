@@ -6,34 +6,43 @@ func _ready() -> void:
 	
 	#instantiate items
 	var key = loadItem("houseKey")
-	var bucket = loadItem("Bucket")
+	var gravestones = loadInspect("Gravestones")
+	var sword = loadInspect("Sword")
 	
-	#room 1
-	$Field.connectExitUnlocked("north", $Field2)
-	$Field.addItem(key)
+	#Crypt
+	$Crypt.connectExitUnlocked("outside", $Graveyard,"inside")
+	$Crypt.addItem(key)
 	
-	#room2
-	#create exit and key useValue
-	var exit = $Field2.connectExitLocked("inside",$House)
-	key.useValue = exit
+	#Graveyard
+	#var exit = 
+	#key.useValue = exit
+	$Graveyard.connectExitUnlocked("east",$"Deep Graveyard","back")
+	$Graveyard.connectExitUnlocked("north",$"High Burial Grounds")
+	$Graveyard.addInspect(gravestones)
 	#add npc to house
-	var houseResident = loadNPC("houseResident")
-	$House.addNPC(houseResident)
-	exit = $House.connectExitLocked("inside",$Barn,"house")
-	houseResident.questReward = exit
 	
-	#add exit to shed with override text
-	$Field2.connectExitUnlocked("east",$Shed,"outside")
-	#add npc to shed
-	var shedResident = loadNPC("resident")
-	$Shed.addNPC(shedResident)
-	$Shed.addItem(bucket)
+	#Deep Graveyard
+	$"Deep Graveyard".addInspect(sword)
 	
-	
-	
+	#exit = $House.connectExitLocked("inside",$Barn,"house")
+	#houseResident.questReward = exit
+	$"High Burial Grounds".connectExitUnlocked("inside",$Catacombs,"outside")
+	$Catacombs.connectExitUnlocked("left",$Catacombs_rm_1,"back")
+	$Catacombs.connectExitUnlocked("right",$Catacombs_rm_2,"back")
+	$Catacombs.connectExitUnlocked("forward",$"Catacombs Intersection","back")
+	$"Catacombs Intersection".connectExitUnlocked("left",$"Catacombs_rm_3","back")
+	var frogKnight = loadNPC("frogKnight")
+	$"Catacombs_rm_3".addNPC(frogKnight)
+
+func loadMusic(musicName: String):
+	return load("res://sounds/" + musicName + ".mp3")
+
 func loadItem(itemName: String):
 	return load("res://items/" + itemName + ".tres")
-	
+
+func loadInspect(inspectName: String):
+	return load("res://Inspectables/" + inspectName + ".tres")
+
 func loadNPC(npcName: String):
 	return load("res://npcs/" + npcName + ".tres")
 

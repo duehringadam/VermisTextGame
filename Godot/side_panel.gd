@@ -12,3 +12,4 @@ func handle_room_changed(new_room):
 	exitlabel.text = new_room.getRoomExit()
 	npcLabel.text = new_room.getNPCDescription()
 	itemLabel.text = new_room.getItemDescription()
+	

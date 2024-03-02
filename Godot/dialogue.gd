@@ -1,5 +1,6 @@
-extends VBoxContainer
+extends Control
 
+signal dialogue_ended
 
 var messages = [
 	"Starting MichaelSoft DOS...
@@ -25,11 +26,21 @@ var messages = [
 	C:/>run vrms
 	
 	LAUNCHING VERMIS: MIST AND SHADOWS...",
-	""
-]
+	"A corpse kneels beside a well...",
+	
+	"Mesmerized by the reflection of its living flesh; 
+	it wonders what could have been done and could have been...",
+	
+	"And for as long as the moon shines, 
+	the feeble illusion will prevail...",
+	"A light sparks in the dark...",
+	"Which flesh is your flesh?",
+	"VERMIS
+	MIST AND SHADOWS"
+	]
 
 var typing_speed = 0.01
-var read_time = 2
+var read_time = 10
 
 var current_message = 0
 var display = ""
@@ -47,7 +58,9 @@ func start_dialogue():
 	$next_char.start()
 
 func stop_dialogue():
-	pass
+	emit_signal("dialogue_ended")
+	
+	queue_free()
 	
 
 func _on_next_char_timeout():
@@ -66,13 +79,24 @@ func _on_next_char_timeout():
 func _on_next_message_timeout():
 	if (current_message == len(messages) - 1):
 		stop_dialogue()
-	else: 
-		current_message += 1
-		display = ""
+	else:
+		$Label.set_horizontal_alignment(1) 
+		$Label.set_vertical_alignment(3)
+		read_time = 5
+		if current_message == 0:
+			current_message += 1
+			display = "\n" + "\n" + "\n" + "\n"
+		else:
+			display += "\n" + "\n"
+			current_message += 1
+			read_time = 5
 		current_char = 0
 		$next_char.start()
 
 
 func _on_next_message_ready() -> void:
 	pass
+	
+
+
 

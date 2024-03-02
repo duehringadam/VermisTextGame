@@ -1,8 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://r78o4og84nxb"]
+[gd_scene load_steps=11 format=3 uid="uid://r78o4og84nxb"]
 
 [ext_resource type="FontFile" uid="uid://rj2q7aei0yhx" path="res://Fonts/Good Old DOS Distorted.ttf" id="1_kcg7w"]
 [ext_resource type="Script" path="res://game_info.gd" id="1_x6kac"]
-[ext_resource type="Script" path="res://dialogue.gd" id="3_7135f"]
+[ext_resource type="PackedScene" uid="uid://c47ajp10lrliu" path="res://intro_text.tscn" id="3_nsg18"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lad2q"]
 bg_color = Color(0, 0, 0, 1)
@@ -36,6 +36,8 @@ VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_yldr8")
 VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_2spmw")
 VScrollBar/styles/scroll = SubResource("StyleBoxFlat_kf5a3")
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jusco"]
+
 [node name="gameInfo" type="PanelContainer"]
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_lad2q")
@@ -51,15 +53,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 20
-script = ExtResource("3_7135f")
 
-[node name="Label" type="Label" parent="ScrollContainer/historyRows"]
+[node name="intro_text" parent="ScrollContainer/historyRows" instance=ExtResource("3_nsg18")]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_styles/panel = SubResource("StyleBoxEmpty_jusco")
 
-[node name="next_char" type="Timer" parent="ScrollContainer/historyRows"]
-
-[node name="next_message" type="Timer" parent="ScrollContainer/historyRows"]
-
-[connection signal="timeout" from="ScrollContainer/historyRows/next_char" to="ScrollContainer/historyRows" method="_on_next_char_timeout"]
-[connection signal="timeout" from="ScrollContainer/historyRows/next_message" to="ScrollContainer/historyRows" method="_on_next_message_timeout"]
+[connection signal="dialogue_ended" from="ScrollContainer/historyRows/intro_text" to="." method="_on_intro_text_dialogue_ended"]
