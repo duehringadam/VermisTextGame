@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://c47ajp10lrliu"]
+
+[ext_resource type="Script" path="res://dialogue.gd" id="1_ft8wr"]
+
+[node name="PanelContainer" type="PanelContainer"]
+script = ExtResource("1_ft8wr")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+
+[node name="next_char" type="Timer" parent="."]
+
+[node name="next_message" type="Timer" parent="."]
+
+[connection signal="timeout" from="next_char" to="." method="_on_next_char_timeout"]
+[connection signal="timeout" from="next_message" to="." method="_on_next_message_timeout"]

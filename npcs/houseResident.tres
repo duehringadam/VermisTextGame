@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="NPC" load_steps=3 format=3 uid="uid://c3imwtp74nug5"]
+
+[ext_resource type="Script" path="res://npcs/npc.gd" id="1_814l3"]
+[ext_resource type="Resource" uid="uid://d21s3i8508gis" path="res://items/Bucket.tres" id="1_i2ccv"]
+
+[resource]
+script = ExtResource("1_814l3")
+npcName = "QuestGiver"
+initalDialogue = "Hello! Please bring my bucket from the shed."
+postQuestDialogue = "Thanks for my bucket! Please go into my barn."
+questItem = ExtResource("1_i2ccv")

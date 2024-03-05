@@ -1,0 +1,79 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4x8yak13n2cc"]
+
+[ext_resource type="FontFile" uid="uid://rj2q7aei0yhx" path="res://Fonts/Good Old DOS Distorted.ttf" id="1_76xna"]
+[ext_resource type="Script" path="res://side_panel.gd" id="1_u0tmy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r0sdw"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 1, 0, 1)
+
+[node name="sidePanel" type="PanelContainer"]
+custom_minimum_size = Vector2(128, 0)
+offset_right = 128.0
+offset_bottom = 647.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_r0sdw")
+script = ExtResource("1_u0tmy")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="Rows" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="infoLabel" type="Label" parent="MarginContainer/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("1_76xna")
+text = "You are in: "
+
+[node name="RoomNameLabel" type="Label" parent="MarginContainer/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("1_76xna")
+text = "Room Name
+"
+autowrap_mode = 1
+
+[node name="roomDescription" type="Label" parent="MarginContainer/Rows"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("1_76xna")
+text = "Room Description"
+autowrap_mode = 2
+
+[node name="exitLabel" type="RichTextLabel" parent="MarginContainer/Rows"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 1, 0, 1)
+theme_override_fonts/normal_font = ExtResource("1_76xna")
+text = "Exits:
+Option"
+fit_content = true
+
+[node name="npcsLabel" type="RichTextLabel" parent="MarginContainer/Rows"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 1, 0, 1)
+theme_override_fonts/normal_font = ExtResource("1_76xna")
+text = "NPCS:
+Option"
+fit_content = true
+
+[node name="itemLabel" type="RichTextLabel" parent="MarginContainer/Rows"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 1, 0, 1)
+theme_override_fonts/normal_font = ExtResource("1_76xna")
+text = "Items:
+Option"
+fit_content = true
+
+[node name="helpLabel" type="RichTextLabel" parent="MarginContainer/Rows"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 1, 0, 1)
+theme_override_fonts/normal_font = ExtResource("1_76xna")
+text = "You can type 'help' at any time to see available commands."
+fit_content = true

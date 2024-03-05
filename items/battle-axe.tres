@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Item" load_steps=2 format=3 uid="uid://5gs1ja8uy60r"]
+
+[ext_resource type="Script" path="res://items/item.gd" id="1_e3k41"]
+
+[resource]
+script = ExtResource("1_e3k41")
+itemName = "battle-axe"
+itemType = 1
+itemDescription = "A warped and rusted battle axe pulled from the chest of someone long deceased."

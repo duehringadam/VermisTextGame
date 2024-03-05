@@ -1,0 +1,339 @@
+[gd_scene load_steps=26 format=3 uid="uid://0by4xhjbidar"]
+
+[ext_resource type="Script" path="res://game.gd" id="1_hc51e"]
+[ext_resource type="FontFile" uid="uid://rj2q7aei0yhx" path="res://Fonts/Good Old DOS Distorted.ttf" id="1_nmk3a"]
+[ext_resource type="Script" path="res://input/input.gd" id="1_ycvyf"]
+[ext_resource type="Script" path="res://CommandProcessor.gd" id="2_foc7h"]
+[ext_resource type="Script" path="res://Player.gd" id="2_mxf0g"]
+[ext_resource type="PackedScene" uid="uid://bta3bhnefd0yb" path="res://rooms/room.tscn" id="3_jd0sj"]
+[ext_resource type="Script" path="res://rooms/Room Manager.gd" id="3_l8yh6"]
+[ext_resource type="AudioStream" uid="uid://ctdrl36hy3jai" path="res://sounds/inn at the edge of the world.mp3" id="4_iiswq"]
+[ext_resource type="Shader" path="res://shaders/crt.gdshader" id="6_l1nyo"]
+[ext_resource type="PackedScene" uid="uid://r78o4og84nxb" path="res://game_info.tscn" id="7_xxh0i"]
+[ext_resource type="Texture2D" uid="uid://dksuhd1ftd8dg" path="res://icon.svg" id="9_7gtp1"]
+[ext_resource type="Shader" path="res://shaders/new_shader.gdshader" id="9_uvttc"]
+[ext_resource type="PackedScene" uid="uid://c4x8yak13n2cc" path="res://side_panel.tscn" id="10_qexic"]
+[ext_resource type="AudioStream" uid="uid://cfktghk465wl7" path="res://sounds/10 Minutes of Ambient Computer Sounds - RetroSciFi Medley.mp3" id="12_oy1ke"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agpge"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ipce"]
+shader = ExtResource("6_l1nyo")
+shader_parameter/res = null
+shader_parameter/mask_type = 0
+shader_parameter/bloom_type = 0
+shader_parameter/hardScan = -8.0
+shader_parameter/hardPix = -2.0
+shader_parameter/hardBloomScan = -2.0
+shader_parameter/hardBloomPix = -1.5
+shader_parameter/bloomAmount = 16.0
+shader_parameter/warp = Vector2(64, 24)
+shader_parameter/maskDark = 0.5
+shader_parameter/maskLight = 1.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3nkj6"]
+shader = ExtResource("6_l1nyo")
+shader_parameter/res = null
+shader_parameter/mask_type = 0
+shader_parameter/bloom_type = 0
+shader_parameter/hardScan = -8.0
+shader_parameter/hardPix = -2.0
+shader_parameter/hardBloomScan = -2.0
+shader_parameter/hardBloomPix = -1.5
+shader_parameter/bloomAmount = 16.0
+shader_parameter/warp = Vector2(64, 24)
+shader_parameter/maskDark = 0.5
+shader_parameter/maskLight = 1.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j120g"]
+bg_color = Color(0, 0, 0, 1)
+border_color = Color(0.282353, 0.956863, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v0r57"]
+bg_color = Color(0, 1, 0, 1)
+draw_center = false
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bpxjw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2p1pn"]
+bg_color = Color(0, 1, 0, 1)
+draw_center = false
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cuqho"]
+bg_color = Color(0.0705882, 0.0705882, 0.0705882, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hxcl3"]
+bg_color = Color(0, 1, 0, 1)
+draw_center = false
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 1, 0, 1)
+
+[sub_resource type="GDScript" id="GDScript_olta5"]
+script/source = "extends Button
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h64ot"]
+shader = ExtResource("9_uvttc")
+shader_parameter/overlay = true
+shader_parameter/scanlines_opacity = 0.054
+shader_parameter/scanlines_width = 0.25
+shader_parameter/grille_opacity = 0.277
+shader_parameter/resolution = Vector2(1920, 1080)
+shader_parameter/pixelate = true
+shader_parameter/roll = true
+shader_parameter/roll_speed = 8.0
+shader_parameter/roll_size = 14.852
+shader_parameter/roll_variation = 1.121
+shader_parameter/distort_intensity = 0.002
+shader_parameter/noise_opacity = 0.024
+shader_parameter/noise_speed = 5.0
+shader_parameter/static_noise_intensity = 0.06
+shader_parameter/aberration = -0.00999995
+shader_parameter/brightness = 1.4
+shader_parameter/discolor = true
+shader_parameter/warp_amount = 0.158
+shader_parameter/clip_warp = false
+shader_parameter/vignette_intensity = 0.2
+shader_parameter/vignette_opacity = 0.728
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_hc51e")
+
+[node name="Room Manager" type="Node" parent="."]
+script = ExtResource("3_l8yh6")
+
+[node name="Crypt" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = -2.0
+offset_top = -341.0
+offset_right = 248.0
+offset_bottom = -141.0
+roomName = "Isolated Crypt"
+roomDescription = "You wake up and find yourself in a small crypt in the middle of Greengrave, it is cold and damp but somehow comfortable."
+
+[node name="Graveyard" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = 5.0
+offset_top = -687.0
+offset_right = 255.0
+offset_bottom = -405.0
+roomName = "Graveyard"
+roomDescription = "Decrepit and abandoned, lichen covered gravestones litter the field infront of you. A bitter cold wind bites through you. Before you lies two paths: east leads deeper into the graveyard; north leads into the higher burial grounds."
+
+[node name="High Burial Grounds" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = -8.0
+offset_top = -1100.0
+offset_right = 286.0
+offset_bottom = -718.0
+roomName = "Higher Burial Grounds"
+roomDescription = "A cold and deafening wind cuts through the summit as you near the end of this pathway; As you reach the peak you delight in the majestic view of the entire graveyard valley below.
+
+Hidden in a nook of this burial ground is a salient with six tombs, one of which is open, leading to the pauper's catacombs.
+
+Those who lie within are not among the living."
+
+[node name="Deep Graveyard" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = 318.0
+offset_top = -596.0
+offset_right = 568.0
+offset_bottom = -396.0
+roomName = "Deep Graveyard"
+roomDescription = "Deep in the graveyard, far from other tombs lies an open coffin, the skeleton within holds a sword tightly in its grasp."
+
+[node name="Catacombs" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = 14.0
+offset_top = -1421.0
+offset_right = 275.0
+offset_bottom = -1139.0
+roomName = "Pauper's Catacombs"
+roomDescription = "A place filled with the corpses of those not remembered: anonymous warriors, disgraced nobles, mere peasants.
+The walls overflow with bones, the pitch dark corridors are leaking and the air is dense with the heavy smell of rot."
+
+[node name="Catacombs_rm_1" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = -344.0
+offset_top = -1412.0
+offset_right = -83.0
+offset_bottom = -1130.0
+roomName = "Burial Room"
+roomDescription = "The walls are lined with those laid to rest. The room hangs heavy with the smell of rot and mold"
+
+[node name="Catacombs_rm_2" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = 350.0
+offset_top = -1424.0
+offset_right = 611.0
+offset_bottom = -1142.0
+roomName = "Side room"
+roomDescription = "An unfinished room in the catacombs, splintered bone litters the floor. Perhaps those constructing the room rest on the ground.
+
+Ominous sculptures line the perimeter of this room."
+
+[node name="Catacombs_rm_3" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = -394.0
+offset_top = -1788.0
+offset_right = -133.0
+offset_bottom = -1466.0
+roomName = "Catacombs Hallway"
+roomDescription = "You find your way through the labryinthian catacombs, the shadows feel alive and dance in the corner of your eye."
+
+[node name="Catacombs_rm_secret" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = 7.0
+offset_top = -2124.0
+offset_right = 268.0
+offset_bottom = -1802.0
+roomName = "Hidden Chambers"
+roomDescription = "A chamber hidden behind the statue of the mother, roots hang from the earthen ceiling above, a battle-axe embedded in a skeletons chest lies within."
+isSecret = true
+
+[node name="Catacombs Intersection" parent="Room Manager" instance=ExtResource("3_jd0sj")]
+offset_left = -5.0
+offset_top = -1740.0
+offset_right = 298.0
+offset_bottom = -1458.0
+roomName = "Catacomb Intersection"
+roomDescription = "You reach an intersection in the catacomb, a statue depicting a mother lies infront.
+Heading left leads deeper into the catacombs, and the path to the right has caved in.
+"
+
+[node name="Player" type="Node" parent="."]
+script = ExtResource("2_mxf0g")
+
+[node name="CommandProcessor" type="Node" parent="."]
+script = ExtResource("2_foc7h")
+
+[node name="Game Scene" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="Background" type="PanelContainer" parent="Game Scene"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = 1151.0
+offset_bottom = 647.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_agpge")
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Game Scene/Background"]
+material = SubResource("ShaderMaterial_2ipce")
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Columns" type="HBoxContainer" parent="Game Scene/Background/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="rows" type="VBoxContainer" parent="Game Scene/Background/MarginContainer/Columns"]
+material = SubResource("ShaderMaterial_3nkj6")
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="gameInfo" parent="Game Scene/Background/MarginContainer/Columns/rows" instance=ExtResource("7_xxh0i")]
+layout_mode = 2
+
+[node name="inputArea" type="PanelContainer" parent="Game Scene/Background/MarginContainer/Columns/rows"]
+visible = false
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_j120g")
+
+[node name="inputHbox" type="HBoxContainer" parent="Game Scene/Background/MarginContainer/Columns/rows/inputArea"]
+layout_mode = 2
+
+[node name="Caret" type="Label" parent="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("1_nmk3a")
+theme_override_font_sizes/font_size = 20
+text = " > "
+
+[node name="input" type="LineEdit" parent="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_colors/caret_color = Color(0, 1, 0, 1)
+theme_override_colors/selection_color = Color(0, 1, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("1_nmk3a")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_v0r57")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_bpxjw")
+max_length = 48
+script = ExtResource("1_ycvyf")
+
+[node name="sidePanel" parent="Game Scene/Background/MarginContainer/Columns" instance=ExtResource("10_qexic")]
+custom_minimum_size = Vector2(248, 0)
+layout_mode = 2
+
+[node name="quit_button" type="Button" parent="Game Scene"]
+layout_mode = 0
+offset_left = 894.0
+offset_top = 555.0
+offset_right = 1108.0
+offset_bottom = 610.0
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("1_nmk3a")
+theme_override_styles/normal = SubResource("StyleBoxFlat_2p1pn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cuqho")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hxcl3")
+text = "Quit"
+script = SubResource("GDScript_olta5")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+visibility_layer = 512
+material = SubResource("ShaderMaterial_h64ot")
+position = Vector2(576, 325)
+scale = Vector2(8.96875, 5.03125)
+texture = ExtResource("9_7gtp1")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_oy1ke")
+volume_db = -15.864
+autoplay = true
+
+[node name="music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_iiswq")
+
+[connection signal="dialogue_ended_pass" from="Game Scene/Background/MarginContainer/Columns/rows/gameInfo" to="." method="_on_game_info_dialogue_ended_pass"]
+[connection signal="player_status" from="Game Scene/Background/MarginContainer/Columns/rows/gameInfo" to="." method="_on_game_info_player_status"]
+[connection signal="text_submitted" from="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" to="." method="_on_input_text_submitted"]
+[connection signal="text_submitted" from="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" to="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" method="_on_text_submitted"]
+[connection signal="pressed" from="Game Scene/quit_button" to="." method="_on_quit_button_pressed"]

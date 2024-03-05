@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="NPC" load_steps=2 format=3 uid="uid://dqlavqpm0fctq"]
+
+[ext_resource type="Script" path="res://npcs/npc.gd" id="1_h7ps6"]
+
+[resource]
+script = ExtResource("1_h7ps6")
+npcName = "Knight"
+initalDialogue = "Oh gods... help me! The horror..."
+postQuestDialogue = ""
+health = 2
