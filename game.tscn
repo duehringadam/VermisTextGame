@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://0by4xhjbidar"]
+[gd_scene load_steps=30 format=3 uid="uid://0by4xhjbidar"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_hc51e"]
 [ext_resource type="FontFile" uid="uid://rj2q7aei0yhx" path="res://Fonts/Good Old DOS Distorted.ttf" id="1_nmk3a"]
@@ -9,8 +9,11 @@
 [ext_resource type="Script" path="res://rooms/Room Manager.gd" id="3_l8yh6"]
 [ext_resource type="AudioStream" uid="uid://ctdrl36hy3jai" path="res://sounds/inn at the edge of the world.mp3" id="4_iiswq"]
 [ext_resource type="Shader" path="res://shaders/crt.gdshader" id="6_l1nyo"]
+[ext_resource type="PackedScene" uid="uid://dst6awmirxu0o" path="res://player_info.tscn" id="7_m571p"]
 [ext_resource type="PackedScene" uid="uid://r78o4og84nxb" path="res://game_info.tscn" id="7_xxh0i"]
+[ext_resource type="PackedScene" uid="uid://cjpscjkp83nrw" path="res://area_picture.tscn" id="8_hdxeo"]
 [ext_resource type="Texture2D" uid="uid://dksuhd1ftd8dg" path="res://icon.svg" id="9_7gtp1"]
+[ext_resource type="PackedScene" uid="uid://dlth4gb0ay1ig" path="res://player_inventory.tscn" id="9_bejbo"]
 [ext_resource type="Shader" path="res://shaders/new_shader.gdshader" id="9_uvttc"]
 [ext_resource type="PackedScene" uid="uid://c4x8yak13n2cc" path="res://side_panel.tscn" id="10_qexic"]
 [ext_resource type="AudioStream" uid="uid://cfktghk465wl7" path="res://sounds/10 Minutes of Ambient Computer Sounds - RetroSciFi Medley.mp3" id="12_oy1ke"]
@@ -45,6 +48,14 @@ shader_parameter/bloomAmount = 16.0
 shader_parameter/warp = Vector2(64, 24)
 shader_parameter/maskDark = 0.5
 shader_parameter/maskLight = 1.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uy5ij"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 1, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j120g"]
 bg_color = Color(0, 0, 0, 1)
@@ -105,10 +116,10 @@ func _process(delta: float) -> void:
 shader = ExtResource("9_uvttc")
 shader_parameter/overlay = true
 shader_parameter/scanlines_opacity = 0.054
-shader_parameter/scanlines_width = 0.25
-shader_parameter/grille_opacity = 0.277
+shader_parameter/scanlines_width = 0.057
+shader_parameter/grille_opacity = 0.334
 shader_parameter/resolution = Vector2(1920, 1080)
-shader_parameter/pixelate = true
+shader_parameter/pixelate = false
 shader_parameter/roll = true
 shader_parameter/roll_speed = 8.0
 shader_parameter/roll_size = 14.852
@@ -120,10 +131,10 @@ shader_parameter/static_noise_intensity = 0.06
 shader_parameter/aberration = -0.00999995
 shader_parameter/brightness = 1.4
 shader_parameter/discolor = true
-shader_parameter/warp_amount = 0.158
+shader_parameter/warp_amount = 0.054
 shader_parameter/clip_warp = false
 shader_parameter/vignette_intensity = 0.2
-shader_parameter/vignette_opacity = 0.728
+shader_parameter/vignette_opacity = 0.624
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_hc51e")
@@ -238,8 +249,8 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -1.0
-offset_right = 1151.0
-offset_bottom = 647.0
+offset_right = 1919.0
+offset_bottom = 1080.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_agpge")
@@ -263,11 +274,39 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 20
 
-[node name="gameInfo" parent="Game Scene/Background/MarginContainer/Columns/rows" instance=ExtResource("7_xxh0i")]
+[node name="visualArea" type="PanelContainer" parent="Game Scene/Background/MarginContainer/Columns/rows"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_uy5ij")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Game Scene/Background/MarginContainer/Columns/rows/visualArea"]
+layout_mode = 2
+
+[node name="playerInfo" parent="Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer" instance=ExtResource("7_m571p")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="areaPicture" parent="Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer" instance=ExtResource("8_hdxeo")]
+layout_mode = 2
+
+[node name="playerInventory" parent="Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer" instance=ExtResource("9_bejbo")]
+layout_mode = 2
+
+[node name="columns" type="HBoxContainer" parent="Game Scene/Background/MarginContainer/Columns/rows"]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="gameInfo" parent="Game Scene/Background/MarginContainer/Columns/rows/columns" instance=ExtResource("7_xxh0i")]
+clip_contents = true
+custom_minimum_size = Vector2(1630, 359)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="sidePanel" parent="Game Scene/Background/MarginContainer/Columns/rows/columns" instance=ExtResource("10_qexic")]
+custom_minimum_size = Vector2(248, 0)
 layout_mode = 2
 
 [node name="inputArea" type="PanelContainer" parent="Game Scene/Background/MarginContainer/Columns/rows"]
-visible = false
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_j120g")
@@ -296,16 +335,8 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_bpxjw")
 max_length = 48
 script = ExtResource("1_ycvyf")
 
-[node name="sidePanel" parent="Game Scene/Background/MarginContainer/Columns" instance=ExtResource("10_qexic")]
-custom_minimum_size = Vector2(248, 0)
+[node name="quit_button" type="Button" parent="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox"]
 layout_mode = 2
-
-[node name="quit_button" type="Button" parent="Game Scene"]
-layout_mode = 0
-offset_left = 894.0
-offset_top = 555.0
-offset_right = 1108.0
-offset_bottom = 610.0
 theme_override_colors/font_color = Color(0, 1, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 1, 0, 1)
 theme_override_colors/font_hover_color = Color(0, 1, 0, 1)
@@ -316,12 +347,12 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_hxcl3")
 text = "Quit"
 script = SubResource("GDScript_olta5")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="crtshader" type="Sprite2D" parent="."]
 modulate = Color(0, 0, 0, 1)
 visibility_layer = 512
 material = SubResource("ShaderMaterial_h64ot")
-position = Vector2(576, 325)
-scale = Vector2(8.96875, 5.03125)
+position = Vector2(960.5, 540)
+scale = Vector2(14.9766, 8.39063)
 texture = ExtResource("9_7gtp1")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
@@ -332,8 +363,8 @@ autoplay = true
 [node name="music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_iiswq")
 
-[connection signal="dialogue_ended_pass" from="Game Scene/Background/MarginContainer/Columns/rows/gameInfo" to="." method="_on_game_info_dialogue_ended_pass"]
-[connection signal="player_status" from="Game Scene/Background/MarginContainer/Columns/rows/gameInfo" to="." method="_on_game_info_player_status"]
+[connection signal="dialogue_ended_pass" from="Game Scene/Background/MarginContainer/Columns/rows/columns/gameInfo" to="." method="_on_game_info_dialogue_ended_pass"]
+[connection signal="player_status" from="Game Scene/Background/MarginContainer/Columns/rows/columns/gameInfo" to="." method="_on_game_info_player_status"]
 [connection signal="text_submitted" from="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" to="." method="_on_input_text_submitted"]
 [connection signal="text_submitted" from="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" to="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" method="_on_text_submitted"]
-[connection signal="pressed" from="Game Scene/quit_button" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/quit_button" to="." method="_on_quit_button_pressed"]

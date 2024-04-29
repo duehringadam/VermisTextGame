@@ -1,40 +1,16 @@
-[gd_scene load_steps=11 format=3 uid="uid://r78o4og84nxb"]
+[gd_scene load_steps=6 format=3 uid="uid://r78o4og84nxb"]
 
-[ext_resource type="FontFile" uid="uid://rj2q7aei0yhx" path="res://Fonts/Good Old DOS Distorted.ttf" id="1_kcg7w"]
 [ext_resource type="Script" path="res://game_info.gd" id="1_x6kac"]
+[ext_resource type="Theme" uid="uid://bjhhmyjvj4cd5" path="res://green_scroll.tres" id="2_l7xak"]
 [ext_resource type="PackedScene" uid="uid://c47ajp10lrliu" path="res://intro_text.tscn" id="3_nsg18"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lad2q"]
 bg_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vwhyg"]
-bg_color = Color(0, 0.72549, 0.211765, 1)
-anti_aliasing = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yldr8"]
-bg_color = Color(0.462745, 1, 0.427451, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2spmw"]
-bg_color = Color(0, 0.827451, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kf5a3"]
-content_margin_left = 3.0
-content_margin_right = 3.0
-bg_color = Color(0, 0, 0, 1)
-draw_center = false
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
 border_color = Color(0, 1, 0, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="Theme" id="Theme_k68if"]
-default_font = ExtResource("1_kcg7w")
-default_font_size = 19
-VScrollBar/styles/grabber = SubResource("StyleBoxFlat_vwhyg")
-VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_yldr8")
-VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_2spmw")
-VScrollBar/styles/scroll = SubResource("StyleBoxFlat_kf5a3")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jusco"]
 
@@ -45,13 +21,12 @@ script = ExtResource("1_x6kac")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 2
-theme = SubResource("Theme_k68if")
+theme = ExtResource("2_l7xak")
 horizontal_scroll_mode = 0
 
 [node name="historyRows" type="VBoxContainer" parent="ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
 theme_override_constants/separation = 20
 
 [node name="intro_text" parent="ScrollContainer/historyRows" instance=ExtResource("3_nsg18")]

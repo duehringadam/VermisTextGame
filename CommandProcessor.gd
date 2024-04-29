@@ -1,6 +1,7 @@
 extends Node
 
 signal room_changed(new_room)
+signal item_taken(item)
 
 var current_room = null
 var player = null
@@ -36,7 +37,7 @@ func processCommand(input: String):
 		"drop":
 			return drop(secondWord,thirdWord)
 		"inventory":
-			return inventory(secondWord)
+			return inventory()
 		"use":
 			return use(secondWord,thirdWord)
 		"talk":
@@ -90,20 +91,22 @@ func take(secondWord: String, thirdWord: String) -> String:
 		if secondWord.to_lower() == item.itemName.to_lower():
 			current_room.removeItem(item)
 			player.takeItem(item)
+			emit_signal("item_taken", item)
 			return "You take the "  + item.itemName + "!"
+			
 		
 		if thirdWord.to_lower() == item.itemName.to_lower():
 			current_room.removeItem(item)
 			player.takeItem(item)
+			emit_signal("item_taken", item)
 			return "You take the "  + item.itemName + "!"
+			
 		
 	return "Item not found!"
 
-func inventory(secondWord: String = "null") -> String:
-	if secondWord == "null":
-		return player.getInventory()
+func inventory() -> String:
+	return player.getInventory()
 
-	return "Item not found!"
 
 func help() -> String:
 	return "You can use these commands:

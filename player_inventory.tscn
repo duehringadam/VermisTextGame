@@ -1,0 +1,75 @@
+[gd_scene load_steps=3 format=3 uid="uid://dlth4gb0ay1ig"]
+
+[ext_resource type="Script" path="res://player_inventory.gd" id="1_l1rwb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5uudy"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 5
+border_color = Color(0, 1, 0, 1)
+
+[node name="playerInventory" type="PanelContainer"]
+custom_minimum_size = Vector2(624, 0)
+theme_override_styles/panel = SubResource("StyleBoxFlat_5uudy")
+script = ExtResource("1_l1rwb")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="inventory" type="GridContainer" parent="MarginContainer"]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+theme_override_constants/h_separation = 80
+theme_override_constants/v_separation = 80
+columns = 4
+
+[node name="item1" type="TextureRect" parent="MarginContainer/inventory"]
+custom_minimum_size = Vector2(100, 135)
+layout_mode = 2
+
+[node name="item2" type="TextureRect" parent="MarginContainer/inventory"]
+custom_minimum_size = Vector2(100, 135)
+layout_mode = 2
+
+[node name="item3" type="TextureRect" parent="MarginContainer/inventory"]
+custom_minimum_size = Vector2(100, 135)
+layout_mode = 2
+
+[node name="item4" type="TextureRect" parent="MarginContainer/inventory"]
+custom_minimum_size = Vector2(100, 135)
+layout_mode = 2
+
+[node name="item5" type="TextureRect" parent="MarginContainer/inventory"]
+custom_minimum_size = Vector2(100, 135)
+layout_mode = 2
+
+[node name="item6" type="TextureRect" parent="MarginContainer/inventory"]
+custom_minimum_size = Vector2(100, 135)
+layout_mode = 2
+
+[node name="item7" type="TextureRect" parent="MarginContainer/inventory"]
+custom_minimum_size = Vector2(100, 135)
+layout_mode = 2
+
+[node name="item8" type="TextureRect" parent="MarginContainer/inventory"]
+custom_minimum_size = Vector2(100, 135)
+layout_mode = 2
+
+[node name="item9" type="TextureRect" parent="MarginContainer/inventory"]
+custom_minimum_size = Vector2(100, 135)
+layout_mode = 2
+
+[node name="item10" type="TextureRect" parent="MarginContainer/inventory"]
+custom_minimum_size = Vector2(100, 135)
+layout_mode = 2
+
+[node name="item11" type="TextureRect" parent="MarginContainer/inventory"]
+custom_minimum_size = Vector2(100, 135)
+layout_mode = 2
+
+[node name="item12" type="TextureRect" parent="MarginContainer/inventory"]
+custom_minimum_size = Vector2(100, 135)
+layout_mode = 2

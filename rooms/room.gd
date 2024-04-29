@@ -5,6 +5,7 @@ class_name GameRoom
 @export var roomName: String = "Room Name": set = setRoomName
 @export_multiline var roomDescription: String = "Room Description": set = setRoomDescription
 @export var isSecret := false
+@export var areaPicture: Texture2D
 
 func setRoomName(newName):
 	$MarginContainer/Rows/roomName.text = newName

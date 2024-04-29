@@ -1,0 +1,32 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://bjhhmyjvj4cd5"]
+
+[ext_resource type="FontFile" uid="uid://rj2q7aei0yhx" path="res://Fonts/Good Old DOS Distorted.ttf" id="1_vlvcx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vwhyg"]
+bg_color = Color(0, 0.72549, 0.211765, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yldr8"]
+bg_color = Color(0.462745, 1, 0.427451, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2spmw"]
+bg_color = Color(0, 0.827451, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kf5a3"]
+content_margin_left = 3.0
+content_margin_right = 3.0
+bg_color = Color(0, 0, 0, 1)
+draw_center = false
+border_color = Color(0, 1, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[resource]
+default_font = ExtResource("1_vlvcx")
+default_font_size = 19
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_vwhyg")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_yldr8")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_2spmw")
+VScrollBar/styles/scroll = SubResource("StyleBoxFlat_kf5a3")

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjpscjkp83nrw"]
+
+[ext_resource type="Texture2D" uid="uid://dvfuoo4we5hn1" path="res://area_pictures/monochrome_test.png" id="1_xkvjh"]
+
+[node name="areaPicture" type="TextureRect"]
+custom_minimum_size = Vector2(624, 0)
+size_flags_horizontal = 3
+texture = ExtResource("1_xkvjh")
