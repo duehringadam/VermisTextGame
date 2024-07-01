@@ -11,10 +11,15 @@ extends Node2D
 @onready var quitButton = $"Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/quit_button"
 
 
-
-
 func _ready() -> void:
 	pass
+	
+func _process(_delta) -> void:
+	#skip intro sequence when pressing debug key "f9"
+	if Input.is_action_just_pressed("debug"):
+		$"Game Scene/Background/MarginContainer/Columns/rows/columns/gameInfo/ScrollContainer/historyRows/intro_text".queue_free()
+		_on_game_info_dialogue_ended_pass()
+	
 
 #when enter is pressed
 func _on_input_text_submitted(new_text: String) -> void:
@@ -32,6 +37,7 @@ func _on_game_info_dialogue_ended_pass() -> void:
 	side_panel.visible = true
 	visualArea.visible = true
 	quitButton.visible = true
+	
 	command_Processor.room_changed.connect(side_panel.handle_room_changed)
 	
 	gameInfo.handleResponse("Welcome to VERMIS: MIST AND SHADOWS 
@@ -52,3 +58,49 @@ func _on_game_info_player_status() -> void:
 		inputArea.visible = false
 	else:
 		pass
+		
+		
+func save():
+	var save_dict = {
+		"player_hp": player.health,
+		"inventory_held": player.inventoryHeld,
+		"player_damage": player.damage,
+		"inventory": player.inventory,
+		"current_room": command_Processor.current_room
+	}
+	return save_dict
+
+func save_game():
+	var save_game = FileAccess.open("user://savegame.save", FileAccess.WRITE)
+	
+	var json_string = JSON.stringify(save())
+	
+	save_game.store_line(json_string)
+
+func _on_command_processor_save_game() -> void:
+	save_game()
+	
+func load_game():
+	if not FileAccess.file_exists("user://savegame.save"):
+		return
+	
+	var save_game = FileAccess.open("user://savegame.save", FileAccess.READ)
+	
+	while save_game.get_position() < save_game.get_length():
+		var json_string = save_game.get_line()
+		var json = JSON.new()
+		var parse_result = json.parse(json_string)
+		var node_data = json.get_data()
+		print(node_data)
+		
+		player.inventory = node_data["inventory"]
+		player.health = node_data["player_hp"]
+		player.inventoryHeld = node_data["inventory_held"]
+		player.damage = node_data["player_damage"]
+		print(command_Processor.current_room)
+		#gameInfo.handleResponse(command_Processor.changeRoom(current_room))
+		
+
+
+func _on_command_processor_load_game() -> void:
+	load_game()

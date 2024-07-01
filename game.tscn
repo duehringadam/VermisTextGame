@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://0by4xhjbidar"]
+[gd_scene load_steps=33 format=3 uid="uid://0by4xhjbidar"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_hc51e"]
 [ext_resource type="FontFile" uid="uid://rj2q7aei0yhx" path="res://Fonts/Good Old DOS Distorted.ttf" id="1_nmk3a"]
@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://bta3bhnefd0yb" path="res://rooms/room.tscn" id="3_jd0sj"]
 [ext_resource type="Script" path="res://rooms/Room Manager.gd" id="3_l8yh6"]
 [ext_resource type="AudioStream" uid="uid://ctdrl36hy3jai" path="res://sounds/inn at the edge of the world.mp3" id="4_iiswq"]
+[ext_resource type="Texture2D" uid="uid://3i11cisjevhv" path="res://area_pictures/crypt.png" id="4_ylfj8"]
+[ext_resource type="Texture2D" uid="uid://dvfuoo4we5hn1" path="res://area_pictures/monochrome_test.png" id="5_it75p"]
 [ext_resource type="Shader" path="res://shaders/crt.gdshader" id="6_l1nyo"]
 [ext_resource type="PackedScene" uid="uid://dst6awmirxu0o" path="res://player_info.tscn" id="7_m571p"]
 [ext_resource type="PackedScene" uid="uid://r78o4og84nxb" path="res://game_info.tscn" id="7_xxh0i"]
@@ -16,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://dlth4gb0ay1ig" path="res://player_inventory.tscn" id="9_bejbo"]
 [ext_resource type="Shader" path="res://shaders/new_shader.gdshader" id="9_uvttc"]
 [ext_resource type="PackedScene" uid="uid://c4x8yak13n2cc" path="res://side_panel.tscn" id="10_qexic"]
+[ext_resource type="Script" path="res://area_picture.gd" id="11_6cvtv"]
 [ext_resource type="AudioStream" uid="uid://cfktghk465wl7" path="res://sounds/10 Minutes of Ambient Computer Sounds - RetroSciFi Medley.mp3" id="12_oy1ke"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agpge"]
@@ -149,6 +152,7 @@ offset_right = 248.0
 offset_bottom = -141.0
 roomName = "Isolated Crypt"
 roomDescription = "You wake up and find yourself in a small crypt in the middle of Greengrave, it is cold and damp but somehow comfortable."
+areaPicture = ExtResource("4_ylfj8")
 
 [node name="Graveyard" parent="Room Manager" instance=ExtResource("3_jd0sj")]
 offset_left = 5.0
@@ -157,6 +161,7 @@ offset_right = 255.0
 offset_bottom = -405.0
 roomName = "Graveyard"
 roomDescription = "Decrepit and abandoned, lichen covered gravestones litter the field infront of you. A bitter cold wind bites through you. Before you lies two paths: east leads deeper into the graveyard; north leads into the higher burial grounds."
+areaPicture = ExtResource("5_it75p")
 
 [node name="High Burial Grounds" parent="Room Manager" instance=ExtResource("3_jd0sj")]
 offset_left = -8.0
@@ -287,6 +292,9 @@ size_flags_horizontal = 3
 
 [node name="areaPicture" parent="Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer" instance=ExtResource("8_hdxeo")]
 layout_mode = 2
+texture = ExtResource("4_ylfj8")
+expand_mode = 1
+script = ExtResource("11_6cvtv")
 
 [node name="playerInventory" parent="Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer" instance=ExtResource("9_bejbo")]
 layout_mode = 2
@@ -363,6 +371,11 @@ autoplay = true
 [node name="music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_iiswq")
 
+[connection signal="item_dropped" from="CommandProcessor" to="Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer/playerInventory" method="_on_command_processor_item_dropped"]
+[connection signal="item_taken" from="CommandProcessor" to="Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer/playerInventory" method="_on_command_processor_item_taken"]
+[connection signal="load_game" from="CommandProcessor" to="." method="_on_command_processor_load_game"]
+[connection signal="room_changed" from="CommandProcessor" to="Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer/areaPicture" method="_on_command_processor_room_changed"]
+[connection signal="save_game" from="CommandProcessor" to="." method="_on_command_processor_save_game"]
 [connection signal="dialogue_ended_pass" from="Game Scene/Background/MarginContainer/Columns/rows/columns/gameInfo" to="." method="_on_game_info_dialogue_ended_pass"]
 [connection signal="player_status" from="Game Scene/Background/MarginContainer/Columns/rows/columns/gameInfo" to="." method="_on_game_info_player_status"]
 [connection signal="text_submitted" from="Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/input" to="." method="_on_input_text_submitted"]

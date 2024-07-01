@@ -1,7 +1,10 @@
 extends Node
 
 signal room_changed(new_room)
-signal item_taken(item)
+signal item_taken(player)
+signal item_dropped(player)
+signal save_game
+signal load_game
 
 var current_room = null
 var player = null
@@ -48,6 +51,10 @@ func processCommand(input: String):
 			return attack(secondWord,thirdWord)
 		"inspect":
 			return inspect(secondWord,thirdWord)
+		"save":
+			return save()
+		"load":
+			return load_player_save()
 		_:
 			return "Unrecognized Command."
 
@@ -134,10 +141,12 @@ func drop(secondWord: String, thirdWord: String) ->String:
 		if secondWord.to_lower() == item.itemName.to_lower():
 			current_room.addItem(item)
 			player.dropItem(item)
+			emit_signal("item_dropped", item)
 			return "You drop the "  + item.itemName + "!"
 		if thirdWord.to_lower() == item.itemName.to_lower():
 			current_room.addItem(item)
 			player.dropItem(item)
+			emit_signal("item_dropped", item)
 			return "You drop the "  + item.itemName + "!"
 	return "You don't currently have that item!"
 
@@ -274,3 +283,12 @@ func inspect(secondWord: String ,thirdWord: String):
 			return inspect.inspectDescription
 		
 	return "Nothing of note."
+
+func save():
+	emit_signal("save_game")
+	return "Game saved!"
+	
+
+func load_player_save():
+	emit_signal("load_game")
+	return "loading game..."

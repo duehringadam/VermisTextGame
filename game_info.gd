@@ -48,5 +48,4 @@ func _addResponseToGame(response: Control):
 
 func _on_intro_text_dialogue_ended() -> void:
 	emit_signal("dialogue_ended_pass")
-
 	

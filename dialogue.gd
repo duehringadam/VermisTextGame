@@ -59,7 +59,6 @@ func start_dialogue():
 
 func stop_dialogue():
 	emit_signal("dialogue_ended")
-	
 	queue_free()
 	
 
