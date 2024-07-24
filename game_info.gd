@@ -3,9 +3,12 @@ extends PanelContainer
 signal dialogue_ended_pass
 signal player_status
 const INPUTRESPONSE = preload("res://input/input_response.tscn")
+var queue = []
+var queue_size = 1
 
-@onready var history_rows = $ScrollContainer/historyRows
-@onready var scroll = $ScrollContainer
+@onready var player =  $"../../../../../../../Player"
+@onready var history_rows = $MarginContainer/ScrollContainer/historyRows
+@onready var scroll = $MarginContainer/ScrollContainer
 @onready var scrollbar = scroll.get_v_scroll_bar()
 
 @export var max_lines_remembered: int = 30
@@ -29,7 +32,7 @@ func handleResponseWithInput(response_text: String, inputText: String):
 	inputResponse.set_text(response_text, inputText)
 	
 	#check player status
-	emit_signal("player_status")
+	#emit_signal("player_status")
 
 ####Private funcs####
 func _handle_scrollbar_changed():
@@ -42,10 +45,10 @@ func _deleteHistory():
 			history_rows.get_child(_i).queue_free()
 
 func _addResponseToGame(response: Control):
-	history_rows.add_child(response)
 	_deleteHistory()
-	
+	history_rows.add_child(response)
 
 func _on_intro_text_dialogue_ended() -> void:
 	emit_signal("dialogue_ended_pass")
 	
+

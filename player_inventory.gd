@@ -1,18 +1,20 @@
 extends PanelContainer
 @onready var itemList: Array = []
 
-@onready var itemPictureList: Array = [$"MarginContainer/inventory/item1",
-$"MarginContainer/inventory/item2",
-$"MarginContainer/inventory/item3",
-$"MarginContainer/inventory/item4",
-$"MarginContainer/inventory/item5",
-$"MarginContainer/inventory/item6",
-$"MarginContainer/inventory/item7",
-$"MarginContainer/inventory/item8",
-$"MarginContainer/inventory/item9",
-$"MarginContainer/inventory/item10",
-$"MarginContainer/inventory/item11",
-$"MarginContainer/inventory/item12"]
+@onready var equippeditems = $MarginContainer/VBoxContainer/Equipped
+
+@onready var itemPictureList: Array = [$MarginContainer/VBoxContainer/inventory/PanelContainer/item1,
+$MarginContainer/VBoxContainer/inventory/PanelContainer2/item2,
+$MarginContainer/VBoxContainer/inventory/PanelContainer3/item3,
+$MarginContainer/VBoxContainer/inventory/PanelContainer4/item4,
+$MarginContainer/VBoxContainer/inventory/PanelContainer5/item5,
+$MarginContainer/VBoxContainer/inventory/PanelContainer6/item6,
+$MarginContainer/VBoxContainer/inventory/PanelContainer7/item7,
+$MarginContainer/VBoxContainer/inventory/PanelContainer8/item8,
+$MarginContainer/VBoxContainer/inventory/PanelContainer9/item9,
+$MarginContainer/VBoxContainer/inventory/PanelContainer10/item10,
+$MarginContainer/VBoxContainer/inventory/PanelContainer11/item11,
+$MarginContainer/VBoxContainer/inventory/PanelContainer12/item12]
 
 
 # Called when the node enters the scene tree for the first time.
@@ -51,3 +53,13 @@ func _on_command_processor_item_dropped(item: Variant) -> void:
 		itemPictureList[loop].texture = null
 		loop +=1
 	
+
+
+
+func _on_command_processor_item_unequipped(item: Variant) -> void:
+	equippeditems.text = equippeditems.text.replace(",","")
+	equippeditems.text = equippeditems.text.replace(item.itemName,"")
+
+
+func _on_player_item_equipped(equipped_items: Variant) -> void:
+		equippeditems.text += equipped_items.itemName

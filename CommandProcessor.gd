@@ -5,10 +5,13 @@ signal item_taken(player)
 signal item_dropped(player)
 signal save_game
 signal load_game
+signal item_unequipped(item)
 
+@onready var characterSelect = $"../Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer/character select"
 var current_room = null
-var player = null
-
+var i = 0
+@onready var player = $"../Player"
+@onready var combat = $"../Combat"
 func initialize(starting_room, player) -> String:
 	self.player = player
 	return changeRoom(starting_room)
@@ -30,33 +33,74 @@ func processCommand(input: String):
 		thirdWord = words[2].to_lower()
 	
 	#process words
-	match firstWord:
-		"go":
-			return go(secondWord,thirdWord)
-		"help":
-			return help()
-		"take":
-			return take(secondWord,thirdWord)
-		"drop":
-			return drop(secondWord,thirdWord)
-		"inventory":
-			return inventory()
-		"use":
-			return use(secondWord,thirdWord)
-		"talk":
-			return talk(secondWord,thirdWord)
-		"give":
-			return give(secondWord,thirdWord)
-		"attack":
-			return attack(secondWord,thirdWord)
-		"inspect":
-			return inspect(secondWord,thirdWord)
-		"save":
-			return save()
-		"load":
-			return load_player_save()
-		_:
-			return "Unrecognized Command."
+	if current_room == null:
+		match firstWord:
+			"confirm":
+				return confirm()
+			_: 
+				return "You cannot do that right now!"
+	if combat.combatInitiated == true:
+		match firstWord:
+			"attack":
+				return attack(secondWord,thirdWord)
+			"talk":
+				return talk(secondWord,thirdWord)
+			"run":
+				return run()
+			_:
+				return "You cannot do that while in combat!"
+				
+	if current_room != null:
+		if player.status_effects["Insanity"] == false && player.status_effects["Slumber"] == false:
+			match firstWord:
+				"go":
+					return go(secondWord,thirdWord)
+				"help":
+					return help()
+				"take":
+					return take(secondWord,thirdWord)
+				"drop":
+					return drop(secondWord,thirdWord)
+				"equip":
+					return equip(secondWord,thirdWord)
+				"unequip":
+					return unequip(secondWord,thirdWord)
+				"inventory":
+					return inventory()
+				"use":
+					return use(secondWord,thirdWord)
+				"talk":
+					return talk(secondWord,thirdWord)
+				"give":
+					return give(secondWord,thirdWord)
+				"attack":
+					return attack(secondWord,thirdWord)
+				"inspect":
+					return inspect(secondWord,thirdWord)
+				"save":
+					return save()
+				"load":
+					return load_player_save()
+				"confirm":
+					return confirm()
+				"run":
+					return run()
+				_:
+					return "Unrecognized Command."
+	elif player.status_effects["Insanity"] == true:
+		return "Hahaha...!"
+	if player.status_effects["Slumber"] == true:
+		return "You are asleep."
+
+func run() -> String:
+	return combat.run()
+
+func confirm() -> String:
+	if characterSelect.visible == true && CharacterSelectManager.select_bool == true:
+		return "What has been done cannot be undone."
+	elif characterSelect.visible == true && CharacterSelectManager.select_bool == false:
+		return "No character selected."
+	return "Unrecognized Command."
 
 func go(secondWord: String, thirdWord: String) -> String:
 	if secondWord =="":
@@ -114,6 +158,25 @@ func take(secondWord: String, thirdWord: String) -> String:
 func inventory() -> String:
 	return player.getInventory()
 
+func equip(secondWord,thirdWord) -> String:
+	if secondWord == "":
+		return "Equip what?"
+	for item in player.inventory:
+		if secondWord.to_lower() == item.itemName.to_lower() or thirdWord.to_lower() == item.itemName.to_lower():
+			if item.isEquipped == false:
+				return player.equipItem(item)
+			else:
+				return "%s already equipped!" % [item.itemName]
+	return "Item not found!"
+
+func unequip(secondWord,thirdWord) -> String:
+	if secondWord == "":
+		return "Unequip what?"
+	for item in player.inventory:
+		if secondWord.to_lower() == item.itemName.to_lower() or thirdWord.to_lower() == item.itemName.to_lower():
+			emit_signal("item_unequipped", item)
+			return player.unequipItem(item)
+	return "Item not found!"
 
 func help() -> String:
 	return "You can use these commands:
@@ -131,6 +194,9 @@ func help() -> String:
 func changeRoom(new_room: GameRoom) -> String:
 	current_room = new_room
 	emit_signal("room_changed", new_room)
+	for npc in current_room.npcs:
+		if npc.isEnemy == true:
+			return combat.initialize(npc, player)
 	return new_room.getFullRoom()
 
 func drop(secondWord: String, thirdWord: String) ->String:
@@ -188,11 +254,19 @@ func talk(secondWord: String,thirdWord:String) -> String:
 	
 	for npc in current_room.npcs:
 		if npc.npcName.to_lower() == secondWord:
-			var dialogue = npc.postQuestDialogue if npc.questItemReceived else npc.initalDialogue
-			return npc.npcName + ": \"" + dialogue + "\"" 
+			if i < npc.dialogue.size():
+				var dialogue = npc.postQuestDialogue if npc.questItemReceived else npc.dialogue[i]
+				i += 1
+				return npc.npcName + ": \"" + dialogue + "\"" 
+			elif i >= npc.dialogue.size():
+				return npc.npcName + ": \"" + npc.dialogue.back() + "\""
 		if npc.npcName.to_lower() == thirdWord:
-			var dialogue = npc.postQuestDialogue if npc.questItemReceived else npc.initalDialogue
-			return npc.npcName + ": \"" + dialogue + "\"" 
+			if i < npc.dialogue.size():
+				var dialogue = npc.postQuestDialogue if npc.questItemReceived else npc.dialogue[i]
+				i += 1
+				return npc.npcName + ": \"" + dialogue + "\"" 
+			elif i >= npc.dialogue.size():
+				return npc.npcName + ": \"" + npc.dialogue.back() + "\""
 	return "%s is not currently in this room!" % secondWord
 
 func give(secondWord: String,thirdWord:String) -> String:
@@ -244,26 +318,22 @@ func give(secondWord: String,thirdWord:String) -> String:
 func attack(secondWord: String,thirdWord:String) -> String:
 	if secondWord =="":
 		return "Attack what?"
-	
-	for npc in current_room.npcs:
-		if npc.npcName.to_lower() == secondWord:
-			npc.health -= player.damage
-			player.health -= 1
-			if npc.health >= 1:
-				return "You deal %s damage to %s!
-				%s deals 1 damage to you!" % [player.damage, npc.npcName,npc.npcName]
-			elif npc.health < 1:
-				current_room.removeNPC(npc)
-				return "you kill %s!" % npc.npcName
+		
+	if player.status_effects["Dread"] == false:
+		for npc in current_room.npcs:
+			if npc.npcName.to_lower() == secondWord && combat.combatInitiated == false:
+				return combat.initialize(npc, player)
+				
+			if npc.npcName.to_lower() == thirdWord && combat.combatInitiated == false:
+				return combat.initialize(npc, player)
 			
-		if npc.npcName.to_lower() == thirdWord:
-			npc.health -= player.damage
-			if npc.health >= 1:
-				return "You deal %s damage to %s!
-				%s deals 1 damage to you!" % [player.damage, npc.npcName,npc.npcName]
-			elif npc.health < 1:
-				current_room.removeNPC(npc)
-				return "you kill %s!" % npc.npcName
+			if npc.npcName.to_lower() == secondWord && combat.combatInitiated == true:
+				return combat.attack(npc, player)
+				
+			if npc.npcName.to_lower() == thirdWord && combat.combatInitiated == true:
+				return combat.attack(npc, player)
+	else:
+		return "You are too afraid to attack!"
 
 	return "That character is not here to attack!"
 

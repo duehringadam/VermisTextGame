@@ -1,43 +1,8 @@
-extends Control
+extends Node
 
 signal dialogue_ended
 
-var messages = [
-	"Starting MichaelSoft DOS...
-	
-	
-	(C)Copyright Michaelsoft Corp 1981-1990.
-	
-	
-	C:/>cd vrms
-	C:/>vrms setup
-	
-	
-	DETECTING...
-	[Processor]: AMF 3-420 Processor.
-	[Power]: ABM V1.2.
-	[Op/Sytem]: MICHAELSOFT-DOS V8.22 [Standard].
-	[32-bit mode]: 16-bit Interface.
-	
-	INSTALLING...
-	
-	VERMIS: LOST DUNGEONS AND FORBIDDEN WOODS INSTALLED SUCCESSFULY.
-	
-	C:/>run vrms
-	
-	LAUNCHING VERMIS: LOST DUNGEONS AND FORBIDDEN WOODS...",
-	"A corpse kneels beside a well...",
-	
-	"Mesmerized by the reflection of its living flesh; 
-	it wonders what could have been done and could have been...",
-	
-	"And for as long as the moon shines, 
-	the feeble illusion will prevail...",
-	"A light sparks in the dark...",
-	"Which flesh is your flesh?",
-	"VERMIS
-	LOST DUNGEONS AND FORBIDDEN WOODS"
-	]
+var messages = []
 
 var typing_speed = 0.01
 var read_time = 10
@@ -95,7 +60,3 @@ func _on_next_message_timeout():
 
 func _on_next_message_ready() -> void:
 	pass
-	
-
-
-
