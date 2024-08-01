@@ -4,6 +4,7 @@ class_name Exit
 var room_1: GameRoom = null
 var room_2: GameRoom = null
 var isLocked := false
+var isSecret := false
 
 
 func getOtherRoom(currentRoom: GameRoom):

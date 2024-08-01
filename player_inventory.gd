@@ -1,9 +1,13 @@
 extends PanelContainer
 @onready var itemList: Array = []
 
-@onready var equippeditems = $MarginContainer/VBoxContainer/Equipped
+@onready var equippeditems1 = $MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/Weapon
+@onready var equippeditems2 = $MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/Armor
+@onready var equippeditems3 = $MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/Jewelry
+@onready var equippeditems4 = $MarginContainer/VBoxContainer/PanelContainer/HBoxContainer/Spell
 
-@onready var itemPictureList: Array = [$MarginContainer/VBoxContainer/inventory/PanelContainer/item1,
+@onready var itemPictureList: Array = [
+$MarginContainer/VBoxContainer/inventory/PanelContainer/item1,
 $MarginContainer/VBoxContainer/inventory/PanelContainer2/item2,
 $MarginContainer/VBoxContainer/inventory/PanelContainer3/item3,
 $MarginContainer/VBoxContainer/inventory/PanelContainer4/item4,
@@ -23,17 +27,31 @@ func _ready() -> void:
 
 
 func _on_command_processor_item_taken(item: Variant) -> void:
+	#print("Starting Item Added!")
 	itemList.append(item)
-	var trigger = false
-	var itemIterate = 0
-	while !trigger:
-		if itemPictureList[itemIterate].texture == null:
-			itemPictureList[itemIterate].texture = item.itemPicture
-			itemList[itemIterate] = item.itemName
-			#print(itemList)
-			trigger = true
-		else:
-			itemIterate += 1
+	if itemList.find(item):
+		itemPictureList[itemList.find(item.itemName)].texture = null
+		var trigger = false
+		var itemIterate = 0
+		while !trigger:
+			if itemPictureList[itemIterate].texture == null:
+				itemPictureList[itemIterate].texture = item.itemPicture
+				itemList[itemIterate] = item.itemName
+				#print(itemList)
+				trigger = true
+			else:
+				itemIterate += 1
+	else:
+		var trigger = false
+		var itemIterate = 0
+		while !trigger:
+			if itemPictureList[itemIterate].texture == null:
+				itemPictureList[itemIterate].texture = item.itemPicture
+				itemList[itemIterate] = item.itemName
+				#print(itemList)
+				trigger = true
+			else:
+				itemIterate += 1
 
 
 func _on_command_processor_item_dropped(item: Variant) -> void:
@@ -45,7 +63,7 @@ func _on_command_processor_item_dropped(item: Variant) -> void:
 	var loop = 0
 	
 	while loop != count:
-		print(Types.itemPicDic[itemList[loop]])
+		#print(Types.itemPicDic[itemList[loop]])
 		itemPictureList[loop].texture = Types.itemPicDic[itemList[loop]]
 		loop+=1
 		
@@ -54,12 +72,28 @@ func _on_command_processor_item_dropped(item: Variant) -> void:
 		loop +=1
 	
 
-
-
 func _on_command_processor_item_unequipped(item: Variant) -> void:
-	equippeditems.text = equippeditems.text.replace(",","")
-	equippeditems.text = equippeditems.text.replace(item.itemName,"")
+	match item.itemType:
+		Types.ItemTypes.WEAPON:
+			equippeditems1.text = ""
+		Types.ItemTypes.ARMOR:
+			equippeditems2.text = ""
+		Types.ItemTypes.JEWELRY:
+			equippeditems3.text = ""
+		Types.ItemTypes.SPELL:
+			equippeditems4.text = ""
+		
+	
 
 
 func _on_player_item_equipped(equipped_items: Variant) -> void:
-		equippeditems.text += equipped_items.itemName
+	match equipped_items.itemType:
+		Types.ItemTypes.WEAPON:
+			equippeditems1.text = equipped_items.itemName 
+		Types.ItemTypes.ARMOR:
+			equippeditems2.text = equipped_items.itemName 
+		Types.ItemTypes.JEWELRY:
+			equippeditems3.text = equipped_items.itemName
+		Types.ItemTypes.SPELL:
+			equippeditems4.text = equipped_items.itemName
+

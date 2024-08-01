@@ -6,5 +6,5 @@ func _ready() -> void:
 	grab_focus()
 
 
-func _on_text_submitted(new_text: String) -> void:
+func _on_text_submitted(_new_text: String) -> void:
 	clear()

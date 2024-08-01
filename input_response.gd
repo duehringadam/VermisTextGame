@@ -20,14 +20,14 @@ func set_text(response: String, input: String =""):
 			else:
 				inputLabel.text = " > " + input
 			responseLabel.text = response
-			start_dialogue()
+			#start_dialogue()
 		else:
 			if input == "":
 				inputLabel.queue_free()
 			else:
 				inputLabel.text = " > [shake]" + input + "[/shake]"
 			responseLabel.text = "[shake]" + response + "[/shake]"
-			start_dialogue()
+			#start_dialogue()
 
 func _ready():
 	pass

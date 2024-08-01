@@ -2,10 +2,14 @@ extends PanelContainer
 
 signal dialogue_ended_pass
 signal player_status
+
+
 const INPUTRESPONSE = preload("res://input/input_response.tscn")
+
+var index: int
 var queue = []
 var queue_size = 1
-
+const TITLE = preload("res://title_screen.tscn")
 @onready var player =  $"../../../../../../../Player"
 @onready var history_rows = $MarginContainer/ScrollContainer/historyRows
 @onready var scroll = $MarginContainer/ScrollContainer
@@ -51,4 +55,12 @@ func _addResponseToGame(response: Control):
 func _on_intro_text_dialogue_ended() -> void:
 	emit_signal("dialogue_ended_pass")
 	
-
+func addTitle():
+	var titlescreen = TITLE.instantiate()
+	history_rows.add_child(titlescreen)
+	index = titlescreen.get_index()
+	
+func removeTitle():
+	for i in history_rows.get_child_count():
+		history_rows.get_child((i - 1)).queue_free()
+	

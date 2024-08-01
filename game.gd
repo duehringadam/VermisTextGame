@@ -1,11 +1,13 @@
 extends Node2D
 
-#const PLAYER = preload("res://Player.gd")
+const TITLE = preload("res://title_screen.tscn")
 @onready var room_music = $"room music"
+@onready var combat = $Combat
 @onready var introText = $"Game Scene/Background/MarginContainer/Columns/rows/columns/gameInfo/MarginContainer/ScrollContainer/historyRows/intro_text"
 @onready var gameInfo = $"Game Scene/Background/MarginContainer/Columns/rows/columns/gameInfo"
 @onready var historyrows = $"Game Scene/Background/MarginContainer/Columns/rows/columns/gameInfo/MarginContainer/ScrollContainer/historyRows"
 @onready var command_Processor = $CommandProcessor
+#@onready var new_CommandProcessor = $"New Command Processor"
 @onready var room_manager = $"Room Manager"
 @onready var player = $Player
 @onready var side_panel = $"Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer/sidePanel"
@@ -20,25 +22,20 @@ extends Node2D
 @onready var characterSelect = $"Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer/character select"
 
 func _ready() -> void:
+	#new_CommandProcessor.process_command("talk to aspect of the dream")
 	command_Processor.room_changed.connect(room_music.change_music)
-	
+	CharacterSelectManager.character_selected.connect(characterSelectDescription)
+	CharacterSelectManager.character_selected.connect(player.character_select)
+	command_Processor.room_changed.connect(side_panel.handle_room_changed)
+
 func _process(_delta) -> void:
 	#skip intro sequence when pressing debug key "f9"
 	if Input.is_action_just_pressed("debug") && is_instance_valid(introText):
 		introText.queue_free()
-		_on_game_info_dialogue_ended_pass()
-	else:
-		pass
-	if player.player_dead == true:
-		var max_lines_remembered = 0
-		var rows_to_forget = historyrows.get_child_count() - max_lines_remembered
-		for _i in range(rows_to_forget):
-			historyrows.get_child(_i).queue_free()
-		gameInfo.handleResponse("You have died!") 
-		gameInfo.handleResponse("You can quit by clicking the button on the bottom of the screen.")
-		player.player_dead = false
-		playerInput.editable = false
-	playerInfo.update_player(player)
+		title_screen()
+	
+	if is_instance_valid(playerInfo):
+		playerInfo.update_player(player)
 	
 
 #when enter is pressed
@@ -61,10 +58,17 @@ func _on_input_text_submitted(new_text: String) -> void:
 		
 	
 
-func _on_game_info_dialogue_ended_pass() -> void:
-	#$music.playing = true
-	visualArea.visible = true
+func title_screen():
+	gameInfo.addTitle()
 	inputArea.visible = true
+	room_music.battle_music(load("res://sounds/Music/character_select.mp3"))
+	#_on_game_info_dialogue_ended_pass()
+
+func _on_game_info_dialogue_ended_pass() -> void:
+	gameInfo.removeTitle()
+	room_music.battle_music(load("res://sounds/Music/Resting in the Torches Light.mp3"))
+	room_music.volume_db = -11
+	visualArea.visible = true
 	side_panel.visible = false
 	quitButton.visible = true
 	characterSelect.visible = true
@@ -73,32 +77,43 @@ func _on_game_info_dialogue_ended_pass() -> void:
 	inventoryArea.visible = false
 	
 	
-	CharacterSelectManager.character_selected.connect(characterSelectDescription)
-	CharacterSelectManager.character_selected.connect(player.character_select)
-	command_Processor.room_changed.connect(side_panel.handle_room_changed)
-	
-	
 	gameInfo.handleResponse("Select your flesh, it will only be temporary, this decision only has the weight you give to it.")
 	gameInfo.handleResponse("Type confirm to continue.")
 	
 
 
 func characterSelectDescription(character: Resource):
-	gameInfo.handleResponse(character.player_stats["Name"])
-	gameInfo.handleResponse(character.description)
-	gameInfo.handleResponse("Strength: " + str(character.player_stats["Strength"]))
-	gameInfo.handleResponse("Intelligence: " + str(character.player_stats["Intelligence"]))
-	gameInfo.handleResponse("Faith: " + str(character.player_stats["Faith"]))
-	gameInfo.handleResponse("Will: " + str(character.player_stats["Will"]))
+	gameInfo.handleResponse(character.player_stats["Name"] +"\n"
+	+ character.description + "\n" 
+	+ "Health: " + str(character.player_stats["Health"]) + "\n"
+	+ "Strength: " + str(character.player_stats["Strength"]) + "\n"
+	+ "Intelligence: " + str(character.player_stats["Intelligence"]) + "\n"
+	+ "Faith: " + str(character.player_stats["Faith"]) + "\n"
+	+ "Will: " + str(character.player_stats["Will"]) + "\n"
+	+ "Chance to hit: %s" %[(character.player_stats["Strength"] + character.player_stats["Will"]) * 12]
+	)
+	var starting_items = "Starting items: " 
+	for i in character.starting_items:
+		starting_items +=  character.starting_items[i].itemName + ", "
+	gameInfo.handleResponse(starting_items)
+	gameInfo.handleResponse("Type confirm to continue.")
+	
 
 func start_game():
+	room_music.volume_db = 0
+	side_panel.visible = true
+	quitButton.visible = true
+	visualArea.visible = true
 	playerInfo.visible = true
 	areaPicture.visible = true
 	inventoryArea.visible = true
-	#characterSelect.visible = false
-	characterSelect.queue_free()
-	side_panel.visible = true
+	characterSelect.visible = false
+	for i in range(gameInfo.history_rows.get_child_count()):
+		gameInfo.history_rows.get_child(i).queue_free()
+	
 	var startingResponse = command_Processor.initialize(room_manager.get_child(0), player)
+	gameInfo.handleResponse("Welcome to Vermis: Lost Dungeon and Forbidden Woods!
+You can type 'help' at any time to see a list of every available command!")
 	gameInfo.handleResponse(startingResponse)
 	
 
@@ -106,49 +121,31 @@ func start_game():
 func _on_quit_button_pressed() -> void:
 	get_tree().quit()
 
-		
-func save():
-	var save_dict = {
-		"player_hp": player.health,
-		"inventory_held": player.inventoryHeld,
-		"player_damage": player.damage,
-		"inventory": player.inventory,
-		"current_room": command_Processor.current_room
-	}
-	return save_dict
 
-func save_game():
-	var save_game = FileAccess.open("user://savegame.save", FileAccess.WRITE)
-	
-	var json_string = JSON.stringify(save())
-	
-	save_game.store_line(json_string)
+func _on_command_processor_quit() -> void:
+	gameInfo.removeTitle()
+	side_panel.visible = false
+	quitButton.visible = true
+	visualArea.visible = false
+	playerInfo.visible = false
+	areaPicture.visible = false
+	inventoryArea.visible = false
+	characterSelect.visible = false
+	command_Processor.current_room = null
+	inputArea.visible = true
+	room_music.battle_music(load("res://sounds/Music/character_select.mp3"))
+	#_on_game_info_dialogue_ended_pass()
 
-func _on_command_processor_save_game() -> void:
-	save_game()
-	
-func load_game():
-	if not FileAccess.file_exists("user://savegame.save"):
-		return
-	
-	var save_game = FileAccess.open("user://savegame.save", FileAccess.READ)
-	
-	while save_game.get_position() < save_game.get_length():
-		var json_string = save_game.get_line()
-		var json = JSON.new()
-		var parse_result = json.parse(json_string)
-		var node_data = json.get_data()
-		print(node_data)
-		
-		player.inventory = node_data["inventory"]
-		player.health = node_data["player_hp"]
-		player.inventoryHeld = node_data["inventory_held"]
-		player.damage = node_data["player_damage"]
-		print(command_Processor.current_room)
-		#gameInfo.handleResponse(command_Processor.changeRoom(node_data["current_room"]))
-		
 
 func _on_command_processor_load_game() -> void:
-	load_game()
-
-
+	side_panel.visible = true
+	quitButton.visible = true
+	visualArea.visible = true
+	playerInfo.visible = true
+	areaPicture.visible = true
+	inventoryArea.visible = true
+	characterSelect.visible = false
+	for i in range(gameInfo.history_rows.get_child_count()):
+		gameInfo.history_rows.get_child(i).queue_free()
+	gameInfo.handleResponse("Welcome to Vermis: Lost Dungeon and Forbidden Woods!
+You can type 'help' at any time to see a list of every available command!")

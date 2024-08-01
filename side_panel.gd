@@ -13,7 +13,7 @@ extends PanelContainer
 func _ready() ->void:
 	scrollbar.connect("changed", _handle_scrollbar_changed)
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if player.status_effects["Blindness"] == true:
 		roomName.text = "You cannot see."
 		roomDescription.text = ""

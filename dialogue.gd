@@ -21,7 +21,7 @@ var messages = [
 	
 	INSTALLING...
 	
-	VERMIS: LOST DUNGEONS AND FORBIDDEN WOODS INSTALLED SUCCESSFULY.
+	VERMIS: LOST DUNGEONS AND FORBIDDEN WOODS INSTALLED SUCCESSFULLY.
 	
 	C:/>run vrms
 	
@@ -79,8 +79,11 @@ func _on_next_message_timeout():
 	if (current_message == len(messages) - 1):
 		stop_dialogue()
 	else:
-		$Label.set_horizontal_alignment(1) 
+		var fv = FontVariation.new()
+		fv.set_base_font(load("res://Fonts/Alkhemikal.ttf"))
+		$Label.set_horizontal_alignment(1)
 		$Label.set_vertical_alignment(3)
+		$Label.add_theme_font_override("font",fv)
 		read_time = 5
 		if current_message == 0:
 			current_message += 1

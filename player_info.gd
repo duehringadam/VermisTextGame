@@ -10,7 +10,7 @@ func _ready() -> void:
 
 func update_player(player):
 	$MarginContainer/VBoxContainer/playerStats.text = str(player.player_stats["Name"])
-	$MarginContainer/VBoxContainer/playerStats2.text = "Health: " +str(player.player_stats["Health"])
+	$MarginContainer/VBoxContainer/playerStats2.text = "Health: " +str(player.player_stats["Health"]) + "/"+str(player.player_stats["Max Health"])
 	$MarginContainer/VBoxContainer/playerStats3.text = "Strength: " +str(player.player_stats["Strength"])
 	$MarginContainer/VBoxContainer/playerStats4.text = "Intelligence: " +str(player.player_stats["Intelligence"])
 	$MarginContainer/VBoxContainer/playerStats5.text = "Faith: " +str(player.player_stats["Faith"])
