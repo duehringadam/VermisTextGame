@@ -1,13 +1,13 @@
 extends Node2D
 
 const TITLE = preload("res://title_screen.tscn")
+@onready var settings = $"Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer/Settings"
 @onready var room_music = $"room music"
 @onready var combat = $Combat
 @onready var introText = $"Game Scene/Background/MarginContainer/Columns/rows/columns/gameInfo/MarginContainer/ScrollContainer/historyRows/intro_text"
 @onready var gameInfo = $"Game Scene/Background/MarginContainer/Columns/rows/columns/gameInfo"
 @onready var historyrows = $"Game Scene/Background/MarginContainer/Columns/rows/columns/gameInfo/MarginContainer/ScrollContainer/historyRows"
 @onready var command_Processor = $CommandProcessor
-#@onready var new_CommandProcessor = $"New Command Processor"
 @onready var room_manager = $"Room Manager"
 @onready var player = $Player
 @onready var side_panel = $"Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer/sidePanel"
@@ -20,6 +20,11 @@ const TITLE = preload("res://title_screen.tscn")
 @onready var quitButton = $"Game Scene/Background/MarginContainer/Columns/rows/inputArea/inputHbox/quit_button"
 @onready var visualContainer = $"Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer"
 @onready var characterSelect = $"Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer/character select"
+@onready var crt_effect = $crtshader
+@onready var level_up = $"Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer/level up"
+@onready var background_ambience = $"background noise"
+
+var game_start = false
 
 func _ready() -> void:
 	#new_CommandProcessor.process_command("talk to aspect of the dream")
@@ -33,10 +38,11 @@ func _process(_delta) -> void:
 	if Input.is_action_just_pressed("debug") && is_instance_valid(introText):
 		introText.queue_free()
 		title_screen()
-	
+	if Input.is_action_just_pressed("Previous Command"):
+		playerInput.text = playerInput.previous_input
 	if is_instance_valid(playerInfo):
 		playerInfo.update_player(player)
-	
+
 
 #when enter is pressed
 func _on_input_text_submitted(new_text: String) -> void:
@@ -100,6 +106,7 @@ func characterSelectDescription(character: Resource):
 	
 
 func start_game():
+	game_start = true
 	room_music.volume_db = 0
 	side_panel.visible = true
 	quitButton.visible = true
@@ -108,6 +115,7 @@ func start_game():
 	areaPicture.visible = true
 	inventoryArea.visible = true
 	characterSelect.visible = false
+	playerInfo.initialize(player.experience,player.experience_required)
 	for i in range(gameInfo.history_rows.get_child_count()):
 		gameInfo.history_rows.get_child(i).queue_free()
 	
@@ -115,12 +123,12 @@ func start_game():
 	gameInfo.handleResponse("Welcome to Vermis: Lost Dungeon and Forbidden Woods!
 You can type 'help' at any time to see a list of every available command!")
 	gameInfo.handleResponse(startingResponse)
-	
-
 
 func _on_quit_button_pressed() -> void:
-	get_tree().quit()
-
+	if game_start == true:
+		get_tree().reload_current_scene()
+	else:
+		get_tree().quit()
 
 func _on_command_processor_quit() -> void:
 	gameInfo.removeTitle()
@@ -138,6 +146,7 @@ func _on_command_processor_quit() -> void:
 
 
 func _on_command_processor_load_game() -> void:
+	game_start = true
 	side_panel.visible = true
 	quitButton.visible = true
 	visualArea.visible = true
@@ -149,3 +158,39 @@ func _on_command_processor_load_game() -> void:
 		gameInfo.history_rows.get_child(i).queue_free()
 	gameInfo.handleResponse("Welcome to Vermis: Lost Dungeon and Forbidden Woods!
 You can type 'help' at any time to see a list of every available command!")
+
+
+func _on_command_processor_settings_signal() -> void:
+	areaPicture.visible = false
+	settings.visible = true
+
+
+func _on_settings_close_settings_pass() -> void:
+	settings.visible = false
+	areaPicture.visible = true
+
+
+func _on_settings_crt_effect_toggled(toggled_on) -> void:
+	crt_effect.visible = toggled_on
+
+
+func _on_player_level_up_screen() -> void:
+	settings.visible = false
+	areaPicture.visible = false
+	level_up.visible = true
+
+
+func _on_level_up_stats_confirmed(stats: Variant) -> void:
+	level_up.visible = false
+	areaPicture.visible = true
+
+
+func _on_settings_ambience_toggled(toggled_on: Variant) -> void:
+	if !toggled_on:
+		background_ambience.volume_db = -80
+	else:
+		background_ambience.volume_db = -15
+
+
+func _on_settings_font_size_changed(size: int) -> void:
+	load("res://UI/ui_theme.tres").default_font_size = size

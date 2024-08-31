@@ -5,10 +5,14 @@ var inventoryMax = 12
 var inventoryHeld = 0
 var player_dead = false
 var check_death = true
-var i = 0
-var x = 0
+var is_buffed = false
+var combat_iterate = 0
 var hazard_iterate_apply = 0
 var room_iterate = 0
+var experience = 0
+var experience_total = 0
+var level = 1
+var experience_required = get_required_experience(level+1)
 
 signal item_dropped(item)
 signal item_equipped(equipped_items)
@@ -18,6 +22,10 @@ signal starting_items_add(i)
 signal dot_taken
 signal player_asleep
 signal item_unequipped(item)
+signal journal_updated(journal)
+signal level_up_screen
+signal level_up_stats(stats)
+signal experience_gained(growth_data)
 
 @onready var areaPicture = $"../Game Scene/Background/MarginContainer/Columns/rows/visualArea/HBoxContainer/areaPicture"
 @onready var room_music = $"../room music"
@@ -60,6 +68,8 @@ func _ready():
 	add_journal(load("res://Journal/lore journals/The Capital.tres"))
 
 func _process(delta: float) -> void:
+	if chance_to_hit > 100:
+		chance_to_hit = 100
 	if player_stats["Health"] <= 0 && check_death:
 		check_death = false
 		player_dead=true
@@ -75,7 +85,7 @@ func character_select(character: Resource):
 	player_stats = character.player_stats
 	for i in character.starting_items.values():
 		tempinventory.append(i)
-		print(tempinventory)
+		#print(tempinventory)
 	for i in character.journal:
 		tempjournal.append(i)
 	
@@ -126,35 +136,44 @@ func inflictStatus(status: String):
 			if immunity[status] == true:
 				return
 			else:
-				status_effects["Infection"] = true
-				var timer = Timer.new()
-				add_child(timer)
-				timer.one_shot = false
-				timer.wait_time = 45.0
-				timer.timeout.connect(infection)
-				timer.start()
+				if status_effects["Infection"] == true:
+					return
+				else:
+					status_effects["Infection"] = true
+					var timer = Timer.new()
+					add_child(timer)
+					timer.one_shot = false
+					timer.wait_time = 45.0
+					timer.timeout.connect(infection)
+					timer.start()
 		"Dread":
 			if immunity[status] == true:
 				return
 			else:
-				status_effects["Dread"] = true
-				var timer = Timer.new()
-				add_child(timer)
-				timer.one_shot = false
-				timer.wait_time = 45.0
-				timer.timeout.connect(endStatusEffect)
-				timer.start()
+				if status_effects["Dread"] == true:
+					return
+				else:
+					status_effects["Dread"] = true
+					var timer = Timer.new()
+					add_child(timer)
+					timer.one_shot = false
+					timer.wait_time = 45.0
+					timer.timeout.connect(endStatusEffect)
+					timer.start()
 		"Slumber":
 			if immunity[status] == true:
 				return
 			else:
-				status_effects["Slumber"] = true
-				var timer = Timer.new()
-				add_child(timer)
-				timer.one_shot = false
-				timer.wait_time = 45.0
-				timer.timeout.connect(endStatusEffect)
-				timer.start()
+				if status_effects["Slumber"] == true:
+					return
+				else:
+					status_effects["Slumber"] = true
+					var timer = Timer.new()
+					add_child(timer)
+					timer.one_shot = false
+					timer.wait_time = 45.0
+					timer.timeout.connect(endStatusEffect)
+					timer.start()
 		"Petrification":
 			if immunity[status] == true:
 				return
@@ -166,45 +185,60 @@ func inflictStatus(status: String):
 			if immunity[status] == true:
 				return
 			else:
-				status_effects["Curse"] = true
+				if status_effects["Curse"] == true:
+					return
+				else:
+					status_effects["Curse"] = true
 		"Insanity":
 			if immunity[status] == true:
 				return
 			else:
-				status_effects["Insanity"] = true
-				var timer = Timer.new()
-				add_child(timer)
-				timer.one_shot = true
-				timer.wait_time = 45.0
-				timer.timeout.connect(endStatusEffect)
-				timer.start()
+				if status_effects["Insanity"] == true:
+					return
+				else:
+					status_effects["Insanity"] = true
+					var timer = Timer.new()
+					add_child(timer)
+					timer.one_shot = true
+					timer.wait_time = 45.0
+					timer.timeout.connect(endStatusEffect)
+					timer.start()
 		"Blindness":
 			if immunity[status] == true:
 				return
 			else:
-				status_effects["Blindness"] = true
-				var timer = Timer.new()
-				add_child(timer)
-				timer.one_shot = true
-				timer.wait_time = 45.0
-				timer.timeout.connect(endStatusEffect)
-				timer.start()
+				if status_effects["Blindness"] == true:
+					return
+				else:
+					status_effects["Blindness"] = true
+					var timer = Timer.new()
+					add_child(timer)
+					timer.one_shot = true
+					timer.wait_time = 45.0
+					timer.timeout.connect(endStatusEffect)
+					timer.start()
 		"Posession":
 			if immunity[status] == true:
 				return
 			else:
-				status_effects["Posession"] = true
+				if status_effects["Posession"] == true:
+					return
+				else:
+					status_effects["Posession"] = true
 		"White Hives":
 			if immunity[status] == true:
 				return
 			else:
-				status_effects["White Hives"] = true
-				var timer = Timer.new()
-				add_child(timer)
-				timer.one_shot = false
-				timer.wait_time = 45.0
-				timer.timeout.connect(infection)
-				timer.start()
+				if status_effects["White Hives"] == true:
+					return
+				else:
+					status_effects["White Hives"] = true
+					var timer = Timer.new()
+					add_child(timer)
+					timer.one_shot = false
+					timer.wait_time = 45.0
+					timer.timeout.connect(infection)
+					timer.start()
 		_:
 			return
 	AudioManager.play_sound(load("res://sounds/SFX/status_inflicted.wav"))
@@ -215,8 +249,9 @@ func takeItem(item: Item):
 	if inventoryHeld < inventoryMax:
 		inventory.append(item)
 		inventoryHeld += 1
-		
+		AudioManager.play_sound(load("res://sounds/SFX/interface2.wav"))
 	elif inventoryHeld >= inventoryMax:
+		AudioManager.play_sound(load("res://sounds/SFX/action failed.wav"))
 		return "You cannot carry anymore!"
 	
 func dropItem(item: Item):
@@ -236,23 +271,30 @@ func unequipItem(item: Item):
 		Types.ItemTypes.ARMOR:
 			if item.isEquipped == true:
 				item.isEquipped = false
-				player_stats["Max Health"] -= item.item_Defense
+				player_stats["Max Health"] -= item.armor_Defense
 				equipped_items["Armor"] = null
+				AudioManager.play_sound(load("res://sounds/SFX/chainmail1.wav"))
 				return "%s unequipped!" % [item.itemName]
 			else:
 				return "Nothing to unequip!"
 		Types.ItemTypes.WEAPON:
-			if item.isEquipped == true:
-				item.isEquipped = false
-				player_stats["Damage"] -= item.weapon_Damage
-				equipped_items["Weapon"] = null
-				return "%s unequipped!" % [item.itemName]
-			else: 
-				return "Nothing to unequip!"
+			if player_stats["Name"] == "Mad Pricker" or player_stats["Name"] == "Rat Man":
+				return "You cannot remove that which binds you."
+			else:
+				if item.isEquipped == true:
+					item.isEquipped = false
+					player_stats["Damage"] -= item.weapon_Damage
+					equipped_items["Weapon"] = null
+					emit_signal("item_unequipped", item)
+					AudioManager.play_sound(load("res://sounds/SFX/sword-unsheathe.wav"))
+					return "%s unequipped!" % [item.itemName]
+				else: 
+					return "Nothing to unequip!"
 		Types.ItemTypes.JEWELRY:
 			if item.isEquipped == true:
 				item.isEquipped = false
 				equipped_items["Jewelry"] = null
+				AudioManager.play_sound(load("res://sounds/SFX/metal-small1.wav"))
 				return "%s unequipped!" % [item.itemName]
 			else:
 				return "Nothing to unequip!"
@@ -260,6 +302,7 @@ func unequipItem(item: Item):
 			if item.isEquipped == true:
 				item.isEquipped = false
 				equipped_items["Spell"] = null
+				AudioManager.play_sound(load("res://sounds/SFX/cloth.wav"))
 				return "%s unequipped!" % [item.itemName]
 			else:
 				return "Nothing to unequip!"
@@ -279,6 +322,7 @@ func equipItem(item: Item):
 							equipped_items["Weapon"] = item
 							emit_signal("save_equipped",equipped_items)
 							emit_signal("item_equipped", equipped_items["Weapon"])
+							AudioManager.play_sound(load("res://sounds/SFX/sword-unsheathe.wav"))
 							return "%s equipped." % [item.itemName]
 						else: 
 							return  "You do not meet the requirements to equip %s" % [item.itemName]
@@ -294,7 +338,9 @@ func equipItem(item: Item):
 							item.isEquipped = true
 							player_stats["Max Health"] += item.armor_Defense
 							equipped_items["Armor"] = item
+							emit_signal("save_equipped",equipped_items)
 							emit_signal("item_equipped", equipped_items["Armor"])
+							AudioManager.play_sound(load("res://sounds/SFX/chainmail1.wav"))
 							return "%s equipped." % [item.itemName]
 						else:
 							return"You do not meet the requirements to equip this!"
@@ -306,7 +352,9 @@ func equipItem(item: Item):
 			if item.isEquipped == false:
 				item.isEquipped = true
 				equipped_items["Jewelry"] = item
+				emit_signal("save_equipped",equipped_items)
 				emit_signal("item_equipped", equipped_items["Jewelry"])
+				AudioManager.play_sound(load("res://sounds/SFX/metal-small1.wav"))
 				return "%s equipped." % [item.itemName]
 		Types.ItemTypes.SPELL:
 			if item.isEquipped == false:
@@ -317,6 +365,7 @@ func equipItem(item: Item):
 							equipped_items["Spell"] = item
 							emit_signal("save_equipped",equipped_items)
 							emit_signal("item_equipped", equipped_items["Spell"])
+							AudioManager.play_sound(load("res://sounds/SFX/cloth.wav"))
 							return "%s equipped!" % [item.itemName]
 						else: 
 							return  "You do not meet the requirements to equip %s!" % [item.itemName]
@@ -347,21 +396,41 @@ func endStatusEffect():
 			status_effects[i] = false
 	
 func infection():
-	if i < 2:
-		emit_signal("dot_taken")
-		AudioManager.play_sound(load("res://sounds/SFX/playerHurt.wav"))
-		game.gameInfo.handleResponse("The infection spreads...")
-		player_stats["Health"] -= 1
-		i += 1
+	if combat_iterate < 2:
+		if status_effects["Infection"]:
+			emit_signal("dot_taken")
+			AudioManager.play_sound(load("res://sounds/SFX/playerHurt.wav"))
+			game.gameInfo.handleResponse("The infection spreads...")
+			player_stats["Health"] -= 1
+			combat_iterate += 1
 	else:
+		combat_iterate = 0
+		endStatusEffect()
+
+func blindness():
+	pass
+
+func petrification():
+	pass
+
+func slumber():
+	pass
+
+func dread():
+	if combat_iterate < 2:
+		combat_iterate += 1
+		game.gameInfo.handleResponse("You are stricken with fear!")
+	else:
+		combat_iterate = 0
 		endStatusEffect()
 
 func whiteHives():
-	if x < 2:
+	if combat_iterate < 2:
 		game.gameInfo.handleResponse("The hives spread...")
 		player_stats["Health"] -= 2
-		x += 1
+		combat_iterate += 1
 	else:
+		combat_iterate = 0
 		endStatusEffect()
 
 func _on_command_processor_confirm_select() -> void:
@@ -379,7 +448,8 @@ func _on_command_processor_room_changed(new_room: Variant) -> void:
 		hazard_iterate_apply +=1
 		for status in new_room.room_hazard:
 			if new_room.room_hazard[status] == true:
-				if hazard_iterate_apply == 6:
+				if hazard_iterate_apply == 14:
+					endImmunity(status)
 					inflictStatus(status)
 					hazard_iterate_apply = 0
 	
@@ -400,12 +470,14 @@ func _on_command_processor_room_changed(new_room: Variant) -> void:
 				boss_timer.start()
 			if room_iterate == 2:
 				game.gameInfo.handleResponse("[wave amp = 10.0 freq = 5.0 connected = 1]The mist swirls and churns unending...[/wave]")
-			if room_iterate == 3:
+			if room_iterate > 3:
 				game.gameInfo.handleResponse("You struggle to stay concious...")
 				game.command_Processor.current_room.roomDescription = "The mist swirls and churns unending..."
 				game.room_manager.add_random_npc()
-			if room_iterate == 4:
+			if room_iterate == 9:
 				game.room_manager.add_paladin()
+			if room_iterate == 12:
+				game.room_manager.add_floating_visage()
 		_:
 			pass
 
@@ -434,9 +506,23 @@ func sleep_boss_timer():
 func heal(heal_amount):
 	return "You heal for %s health!" % [heal_amount]
 
-func buff():
-	return "You frenzy!"
+func buff(item):
+	if is_buffed == false:
+		is_buffed = true
+		var timer = Timer.new()
+		add_child(timer)
+		timer.one_shot = false
+		timer.wait_time = 45.0
+		timer.timeout.connect(endBuff.bind(item))
+		timer.start()
+		return "You frenzy!"
+	else:
+		return "You are already frenzied!"
 
+func endBuff(item):
+	is_buffed = false
+	player_stats["Damage"] -= item.damage_increase
+	game.gameInfo.handleResponse("Your frenzy ends...")
 
 func _on_command_processor_quit() -> void:
 	for i in equipped_items.values():
@@ -459,6 +545,48 @@ func get_journal():
 func add_journal(entry):
 	if entry != null:
 		journal.append(entry)
+		emit_signal("journal_updated",journal)
 		return "You added entry: %s to your journal!" % [entry.journal_name]
 	return ""
 	
+func updatePlayer():
+	for i in status_effects:
+		#print(i)
+		if status_effects[i] == true:
+			match i:
+				"Infection":
+					return infection()
+				"Blindness":
+					return blindness()
+				"Petrification":
+					return petrification()
+				"Slumber":
+					return slumber()
+				"Dread":
+					return dread()
+	return ""
+
+func get_required_experience(level):
+	return round(pow(level,1.8) + level * 4)
+
+func gain_experience(amount):
+	experience_total += amount
+	experience += amount
+	var growth_data = []
+	while experience >= experience_required:
+		experience -= experience_required
+		growth_data.append([experience_required,experience_required])
+		level_up()
+	growth_data.append([experience,experience_required])
+	emit_signal("experience_gained",growth_data)
+
+func level_up():
+	level += 1
+	experience_required = get_required_experience(level+1)
+	emit_signal("level_up_screen")
+	emit_signal("level_up_stats", player_stats)
+
+
+func _on_level_up_stats_confirmed(stats: Variant) -> void:
+	player_stats = stats
+	player_stats["Max Health"] = stats["Health"]
