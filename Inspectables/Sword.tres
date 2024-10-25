@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="Inspect" load_steps=2 format=3 uid="uid://cvgg3l6rjn2qi"]
-
-[ext_resource type="Script" path="res://Inspectables/inspect.gd" id="1_hqx6l"]
-
-[resource]
-script = ExtResource("1_hqx6l")
-inspectName = "Sword"
-inspectDescription = "A sword that when swung, creates an ominous whistling sound."

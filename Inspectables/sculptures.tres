@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="Inspect" load_steps=2 format=3 uid="uid://p0x5k36juhu"]
-
-[ext_resource type="Script" path="res://Inspectables/inspect.gd" id="1_wk8mr"]
-
-[resource]
-script = ExtResource("1_wk8mr")
-inspectName = "Sculptures"
-inspectDescription = "Foreboding sculputres that depict skeletons line the perimeter of this room. You feel as if they are watching you."
