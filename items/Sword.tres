@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="Item" load_steps=2 format=3 uid="uid://docjp4cmy3i8v"]
-
-[ext_resource type="Script" path="res://items/item.gd" id="1_m5j86"]
-
-[resource]
-script = ExtResource("1_m5j86")
-itemName = "Sword"
-itemType = 0
-itemDescription = "A sword pilfered from a nameless corpse, when swung it emits a whistling sound, reminding you of death."

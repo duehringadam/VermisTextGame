@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="Item" load_steps=2 format=3 uid="uid://d21s3i8508gis"]
-
-[ext_resource type="Script" path="res://items/item.gd" id="1_6bli8"]
-
-[resource]
-script = ExtResource("1_6bli8")
-itemName = "Bucket"
-itemType = 1
-itemDescription = "Item Description"

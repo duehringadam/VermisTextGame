@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="Item" load_steps=2 format=3 uid="uid://my8at4tjnuql"]
-
-[ext_resource type="Script" path="res://items/item.gd" id="1_4fat8"]
-
-[resource]
-script = ExtResource("1_4fat8")
-itemName = "Skull"
-itemType = 0
-itemDescription = "Top half of a skull cleaved in twain."
