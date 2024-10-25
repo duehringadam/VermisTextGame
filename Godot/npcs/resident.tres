@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="NPC" load_steps=2 format=3 uid="uid://btyso80svk6xs"]
-
-[ext_resource type="Script" path="res://npcs/npc.gd" id="1_qnopl"]
-
-[resource]
-script = ExtResource("1_qnopl")
-npcName = "Resident"
-initalDialogue = "Hello! Please leave my shed."
-postQuestDialogue = ""
